@@ -19,6 +19,7 @@ import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { RoomService } from "../room.service";
 import { RoomCreateInput } from "./RoomCreateInput";
 import { Room } from "./Room";
+import { Post } from "../../post/base/Post";
 import { RoomFindManyArgs } from "./RoomFindManyArgs";
 import { RoomWhereUniqueInput } from "./RoomWhereUniqueInput";
 import { RoomUpdateInput } from "./RoomUpdateInput";

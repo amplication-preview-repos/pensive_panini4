@@ -1,4 +1,5 @@
 import { InputJsonValue } from "../../types";
+import { ProfileCreateNestedManyWithoutUsersInput } from "./ProfileCreateNestedManyWithoutUsersInput";
 
 export type UserCreateInput = {
   firstName?: string | null;
@@ -7,4 +8,5 @@ export type UserCreateInput = {
   email?: string | null;
   password: string;
   roles: InputJsonValue;
+  profiles?: ProfileCreateNestedManyWithoutUsersInput;
 };

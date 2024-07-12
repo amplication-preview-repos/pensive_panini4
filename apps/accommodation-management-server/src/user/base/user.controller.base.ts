@@ -19,9 +19,13 @@ import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { UserService } from "../user.service";
 import { UserCreateInput } from "./UserCreateInput";
 import { User } from "./User";
+import { Post } from "../../post/base/Post";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
 import { UserUpdateInput } from "./UserUpdateInput";
+import { ProfileFindManyArgs } from "../../profile/base/ProfileFindManyArgs";
+import { Profile } from "../../profile/base/Profile";
+import { ProfileWhereUniqueInput } from "../../profile/base/ProfileWhereUniqueInput";
 
 export class UserControllerBase {
   constructor(protected readonly service: UserService) {}
@@ -150,5 +154,88 @@ export class UserControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.Get("/:id/profiles")
+  @ApiNestedQuery(ProfileFindManyArgs)
+  async findProfiles(
+    @common.Req() request: Request,
+    @common.Param() params: UserWhereUniqueInput
+  ): Promise<Profile[]> {
+    const query = plainToClass(ProfileFindManyArgs, request.query);
+    const results = await this.service.findProfiles(params.id, {
+      ...query,
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        username: true,
+        bio: true,
+        profilePicture: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/profiles")
+  async connectProfiles(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: ProfileWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      profiles: {
+        connect: body,
+      },
+    };
+    await this.service.updateUser({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/profiles")
+  async updateProfiles(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: ProfileWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      profiles: {
+        set: body,
+      },
+    };
+    await this.service.updateUser({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/profiles")
+  async disconnectProfiles(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: ProfileWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      profiles: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateUser({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

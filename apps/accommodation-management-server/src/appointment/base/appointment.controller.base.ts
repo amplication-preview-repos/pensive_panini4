@@ -19,6 +19,7 @@ import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { AppointmentService } from "../appointment.service";
 import { AppointmentCreateInput } from "./AppointmentCreateInput";
 import { Appointment } from "./Appointment";
+import { Post } from "../../post/base/Post";
 import { AppointmentFindManyArgs } from "./AppointmentFindManyArgs";
 import { AppointmentWhereUniqueInput } from "./AppointmentWhereUniqueInput";
 import { AppointmentUpdateInput } from "./AppointmentUpdateInput";

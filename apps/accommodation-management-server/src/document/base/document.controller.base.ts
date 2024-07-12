@@ -19,6 +19,7 @@ import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { DocumentService } from "../document.service";
 import { DocumentCreateInput } from "./DocumentCreateInput";
 import { Document } from "./Document";
+import { Post } from "../../post/base/Post";
 import { DocumentFindManyArgs } from "./DocumentFindManyArgs";
 import { DocumentWhereUniqueInput } from "./DocumentWhereUniqueInput";
 import { DocumentUpdateInput } from "./DocumentUpdateInput";

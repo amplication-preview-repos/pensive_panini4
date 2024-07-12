@@ -5,6 +5,11 @@ import { ReviewModule } from "./review/review.module";
 import { AppointmentModule } from "./appointment/appointment.module";
 import { DocumentModule } from "./document/document.module";
 import { UserModule } from "./user/user.module";
+import { ProfileModule } from "./profile/profile.module";
+import { CommentModule } from "./comment/comment.module";
+import { PostModule } from "./post/post.module";
+import { VideoCallModule } from "./videoCall/videoCall.module";
+import { ChatModule } from "./chat/chat.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
@@ -23,6 +28,11 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
     AppointmentModule,
     DocumentModule,
     UserModule,
+    ProfileModule,
+    CommentModule,
+    PostModule,
+    VideoCallModule,
+    ChatModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,

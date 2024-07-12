@@ -19,6 +19,7 @@ import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { ReviewService } from "../review.service";
 import { ReviewCreateInput } from "./ReviewCreateInput";
 import { Review } from "./Review";
+import { Post } from "../../post/base/Post";
 import { ReviewFindManyArgs } from "./ReviewFindManyArgs";
 import { ReviewWhereUniqueInput } from "./ReviewWhereUniqueInput";
 import { ReviewUpdateInput } from "./ReviewUpdateInput";

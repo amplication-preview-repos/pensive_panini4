@@ -29,6 +29,26 @@ import { UserList } from "./user/UserList";
 import { UserCreate } from "./user/UserCreate";
 import { UserEdit } from "./user/UserEdit";
 import { UserShow } from "./user/UserShow";
+import { ProfileList } from "./profile/ProfileList";
+import { ProfileCreate } from "./profile/ProfileCreate";
+import { ProfileEdit } from "./profile/ProfileEdit";
+import { ProfileShow } from "./profile/ProfileShow";
+import { CommentList } from "./comment/CommentList";
+import { CommentCreate } from "./comment/CommentCreate";
+import { CommentEdit } from "./comment/CommentEdit";
+import { CommentShow } from "./comment/CommentShow";
+import { PostList } from "./post/PostList";
+import { PostCreate } from "./post/PostCreate";
+import { PostEdit } from "./post/PostEdit";
+import { PostShow } from "./post/PostShow";
+import { VideoCallList } from "./videoCall/VideoCallList";
+import { VideoCallCreate } from "./videoCall/VideoCallCreate";
+import { VideoCallEdit } from "./videoCall/VideoCallEdit";
+import { VideoCallShow } from "./videoCall/VideoCallShow";
+import { ChatList } from "./chat/ChatList";
+import { ChatCreate } from "./chat/ChatCreate";
+import { ChatEdit } from "./chat/ChatEdit";
+import { ChatShow } from "./chat/ChatShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -96,6 +116,41 @@ const App = (): React.ReactElement => {
           edit={UserEdit}
           create={UserCreate}
           show={UserShow}
+        />
+        <Resource
+          name="Profile"
+          list={ProfileList}
+          edit={ProfileEdit}
+          create={ProfileCreate}
+          show={ProfileShow}
+        />
+        <Resource
+          name="Comment"
+          list={CommentList}
+          edit={CommentEdit}
+          create={CommentCreate}
+          show={CommentShow}
+        />
+        <Resource
+          name="Post"
+          list={PostList}
+          edit={PostEdit}
+          create={PostCreate}
+          show={PostShow}
+        />
+        <Resource
+          name="VideoCall"
+          list={VideoCallList}
+          edit={VideoCallEdit}
+          create={VideoCallCreate}
+          show={VideoCallShow}
+        />
+        <Resource
+          name="Chat"
+          list={ChatList}
+          edit={ChatEdit}
+          create={ChatCreate}
+          show={ChatShow}
         />
       </Admin>
     </div>

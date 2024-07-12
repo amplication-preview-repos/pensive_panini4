@@ -19,6 +19,7 @@ import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { PropertyService } from "../property.service";
 import { PropertyCreateInput } from "./PropertyCreateInput";
 import { Property } from "./Property";
+import { Post } from "../../post/base/Post";
 import { PropertyFindManyArgs } from "./PropertyFindManyArgs";
 import { PropertyWhereUniqueInput } from "./PropertyWhereUniqueInput";
 import { PropertyUpdateInput } from "./PropertyUpdateInput";

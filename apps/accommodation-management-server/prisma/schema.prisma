@@ -63,15 +63,66 @@ model Document {
 }
 
 model User {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  firstName String?
+  lastName  String?
+  username  String    @unique
+  email     String?   @unique
+  password  String
+  roles     Json
+  profiles  Profile[]
+}
+
+model Profile {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  username       String?
+  bio            String?
+  profilePicture Json?
+  user           User?    @relation(fields: [userId], references: [id])
+  userId         String?
+}
+
+model Comment {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  firstName String?
-  lastName  String?
-  username  String   @unique
-  email     String?  @unique
-  password  String
-  roles     Json
+  content   String?
+  author    String?
+  post      Post?    @relation(fields: [postId], references: [id])
+  postId    String?
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String?
+  content   String?
+  images    Json?
+  author    String?
+  comments  Comment[]
+}
+
+model VideoCall {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  callEnd   DateTime?
+  callStart DateTime?
+}
+
+model Chat {
+  id                     String    @id @default(cuid())
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  messages               String?
+  chatCreatedAt          DateTime?
+  chatCreatedAtTimestamp DateTime?
+  chatMessages           String?
 }
 
 enum EnumRoomTypeField {
