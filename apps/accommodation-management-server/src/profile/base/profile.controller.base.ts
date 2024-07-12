@@ -54,6 +54,12 @@ export class ProfileControllerBase {
             id: true,
           },
         },
+
+        surname: true,
+        age: true,
+        requestedRoomType: true,
+        name: true,
+        institution: true,
       },
     });
   }
@@ -78,6 +84,12 @@ export class ProfileControllerBase {
             id: true,
           },
         },
+
+        surname: true,
+        age: true,
+        requestedRoomType: true,
+        name: true,
+        institution: true,
       },
     });
   }
@@ -103,6 +115,12 @@ export class ProfileControllerBase {
             id: true,
           },
         },
+
+        surname: true,
+        age: true,
+        requestedRoomType: true,
+        name: true,
+        institution: true,
       },
     });
     if (result === null) {
@@ -145,6 +163,12 @@ export class ProfileControllerBase {
               id: true,
             },
           },
+
+          surname: true,
+          age: true,
+          requestedRoomType: true,
+          name: true,
+          institution: true,
         },
       });
     } catch (error) {
@@ -179,6 +203,12 @@ export class ProfileControllerBase {
               id: true,
             },
           },
+
+          surname: true,
+          age: true,
+          requestedRoomType: true,
+          name: true,
+          institution: true,
         },
       });
     } catch (error) {

@@ -171,6 +171,11 @@ export class PostControllerBase {
             id: true,
           },
         },
+
+        isActive: true,
+        accommodation: true,
+        student: true,
+        stayDurationMonths: true,
       },
     });
     if (results === null) {

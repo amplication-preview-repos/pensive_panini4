@@ -23,6 +23,10 @@ const CREATE_INPUT = {
   updatedAt: new Date(),
   content: "exampleContent",
   author: "exampleAuthor",
+  isActive: "true",
+  accommodation: "exampleAccommodation",
+  student: "exampleStudent",
+  stayDurationMonths: 42,
 };
 const CREATE_RESULT = {
   id: "exampleId",
@@ -30,6 +34,10 @@ const CREATE_RESULT = {
   updatedAt: new Date(),
   content: "exampleContent",
   author: "exampleAuthor",
+  isActive: "true",
+  accommodation: "exampleAccommodation",
+  student: "exampleStudent",
+  stayDurationMonths: 42,
 };
 const FIND_MANY_RESULT = [
   {
@@ -38,6 +46,10 @@ const FIND_MANY_RESULT = [
     updatedAt: new Date(),
     content: "exampleContent",
     author: "exampleAuthor",
+    isActive: "true",
+    accommodation: "exampleAccommodation",
+    student: "exampleStudent",
+    stayDurationMonths: 42,
   },
 ];
 const FIND_ONE_RESULT = {
@@ -46,6 +58,10 @@ const FIND_ONE_RESULT = {
   updatedAt: new Date(),
   content: "exampleContent",
   author: "exampleAuthor",
+  isActive: "true",
+  accommodation: "exampleAccommodation",
+  student: "exampleStudent",
+  stayDurationMonths: 42,
 };
 
 const service = {

@@ -25,6 +25,12 @@ const CREATE_INPUT = {
   description: "exampleDescription",
   name: "exampleName",
   provider: "exampleProvider",
+  accommodationProvider: "exampleAccommodationProvider",
+  location: "exampleLocation",
+  waterIncluded: "true",
+  electricityIncluded: "true",
+  wifiAmount: 42.42,
+  wifiIncluded: "true",
 };
 const CREATE_RESULT = {
   id: "exampleId",
@@ -34,6 +40,12 @@ const CREATE_RESULT = {
   description: "exampleDescription",
   name: "exampleName",
   provider: "exampleProvider",
+  accommodationProvider: "exampleAccommodationProvider",
+  location: "exampleLocation",
+  waterIncluded: "true",
+  electricityIncluded: "true",
+  wifiAmount: 42.42,
+  wifiIncluded: "true",
 };
 const FIND_MANY_RESULT = [
   {
@@ -44,6 +56,12 @@ const FIND_MANY_RESULT = [
     description: "exampleDescription",
     name: "exampleName",
     provider: "exampleProvider",
+    accommodationProvider: "exampleAccommodationProvider",
+    location: "exampleLocation",
+    waterIncluded: "true",
+    electricityIncluded: "true",
+    wifiAmount: 42.42,
+    wifiIncluded: "true",
   },
 ];
 const FIND_ONE_RESULT = {
@@ -54,6 +72,12 @@ const FIND_ONE_RESULT = {
   description: "exampleDescription",
   name: "exampleName",
   provider: "exampleProvider",
+  accommodationProvider: "exampleAccommodationProvider",
+  location: "exampleLocation",
+  waterIncluded: "true",
+  electricityIncluded: "true",
+  wifiAmount: 42.42,
+  wifiIncluded: "true",
 };
 
 const service = {

@@ -7,4 +7,8 @@ export type CommentOrderByInput = {
   content?: SortOrder;
   author?: SortOrder;
   postId?: SortOrder;
+  isActive?: SortOrder;
+  accommodation?: SortOrder;
+  student?: SortOrder;
+  stayDurationMonths?: SortOrder;
 };

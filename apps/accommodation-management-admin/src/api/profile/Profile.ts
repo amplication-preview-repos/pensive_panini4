@@ -9,4 +9,9 @@ export type Profile = {
   bio: string | null;
   profilePicture: JsonValue;
   user?: User | null;
+  surname: string | null;
+  age: number | null;
+  requestedRoomType?: "Option1" | null;
+  name: string | null;
+  institution: string | null;
 };

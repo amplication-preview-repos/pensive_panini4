@@ -9,6 +9,7 @@ import {
   ReferenceManyField,
   Datagrid,
   ReferenceField,
+  BooleanField,
 } from "react-admin";
 
 import { POST_TITLE_FIELD } from "./PostTitle";
@@ -38,6 +39,10 @@ export const PostShow = (props: ShowProps): React.ReactElement => {
             <ReferenceField label="post" source="post.id" reference="Post">
               <TextField source={POST_TITLE_FIELD} />
             </ReferenceField>
+            <BooleanField label="isActive" source="isActive" />
+            <TextField label="accommodation" source="accommodation" />
+            <TextField label="student" source="student" />
+            <TextField label="stayDurationMonths" source="stayDurationMonths" />
           </Datagrid>
         </ReferenceManyField>
       </SimpleShowLayout>

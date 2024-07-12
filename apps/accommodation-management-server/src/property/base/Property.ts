@@ -11,16 +11,28 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
+
 import {
   IsString,
   IsDate,
   MaxLength,
   IsOptional,
   ValidateNested,
+  IsEnum,
+  IsBoolean,
+  IsNumber,
+  Min,
+  Max,
 } from "class-validator";
+
 import { Type } from "class-transformer";
 import { Room } from "../../room/base/Room";
 import { Review } from "../../review/base/Review";
+import { IsJSONValue } from "../../validators";
+import { GraphQLJSON } from "graphql-type-json";
+import { JsonValue } from "type-fest";
+import { EnumPropertyAccommodationStatus } from "./EnumPropertyAccommodationStatus";
+import { EnumPropertyRoomType } from "./EnumPropertyRoomType";
 
 @ObjectType()
 class Property {
@@ -113,6 +125,118 @@ class Property {
   @Type(() => Review)
   @IsOptional()
   reviews?: Array<Review>;
+
+  @ApiProperty({
+    required: false,
+  })
+  @IsJSONValue()
+  @IsOptional()
+  @Field(() => GraphQLJSON, {
+    nullable: true,
+  })
+  propertyPictures!: JsonValue;
+
+  @ApiProperty({
+    required: false,
+  })
+  @IsJSONValue()
+  @IsOptional()
+  @Field(() => GraphQLJSON, {
+    nullable: true,
+  })
+  roomPictures!: JsonValue;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumPropertyAccommodationStatus,
+  })
+  @IsEnum(EnumPropertyAccommodationStatus)
+  @IsOptional()
+  @Field(() => EnumPropertyAccommodationStatus, {
+    nullable: true,
+  })
+  accommodationStatus?: "Option1" | null;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumPropertyRoomType,
+  })
+  @IsEnum(EnumPropertyRoomType)
+  @IsOptional()
+  @Field(() => EnumPropertyRoomType, {
+    nullable: true,
+  })
+  roomType?: "Option1" | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  accommodationProvider!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  location!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: Boolean,
+  })
+  @IsBoolean()
+  @IsOptional()
+  @Field(() => Boolean, {
+    nullable: true,
+  })
+  waterIncluded!: boolean | null;
+
+  @ApiProperty({
+    required: false,
+    type: Boolean,
+  })
+  @IsBoolean()
+  @IsOptional()
+  @Field(() => Boolean, {
+    nullable: true,
+  })
+  electricityIncluded!: boolean | null;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsNumber()
+  @Min(-999999999)
+  @Max(999999999)
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  wifiAmount!: number | null;
+
+  @ApiProperty({
+    required: false,
+    type: Boolean,
+  })
+  @IsBoolean()
+  @IsOptional()
+  @Field(() => Boolean, {
+    nullable: true,
+  })
+  wifiIncluded!: boolean | null;
 }
 
 export { Property as Property };

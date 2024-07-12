@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import {
   List,
   Datagrid,
@@ -6,7 +7,9 @@ import {
   TextField,
   DateField,
   ReferenceField,
+  BooleanField,
 } from "react-admin";
+
 import Pagination from "../Components/Pagination";
 import { POST_TITLE_FIELD } from "../post/PostTitle";
 
@@ -28,6 +31,10 @@ export const CommentList = (props: ListProps): React.ReactElement => {
         <ReferenceField label="post" source="post.id" reference="Post">
           <TextField source={POST_TITLE_FIELD} />
         </ReferenceField>
+        <BooleanField label="isActive" source="isActive" />
+        <TextField label="accommodation" source="accommodation" />
+        <TextField label="student" source="student" />
+        <TextField label="stayDurationMonths" source="stayDurationMonths" />
       </Datagrid>
     </List>
   );

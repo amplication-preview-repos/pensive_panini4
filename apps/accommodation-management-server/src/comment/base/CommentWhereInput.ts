@@ -16,6 +16,8 @@ import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { PostWhereUniqueInput } from "../../post/base/PostWhereUniqueInput";
+import { BooleanNullableFilter } from "../../util/BooleanNullableFilter";
+import { IntNullableFilter } from "../../util/IntNullableFilter";
 
 @InputType()
 class CommentWhereInput {
@@ -63,6 +65,50 @@ class CommentWhereInput {
     nullable: true,
   })
   post?: PostWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
+    type: BooleanNullableFilter,
+  })
+  @Type(() => BooleanNullableFilter)
+  @IsOptional()
+  @Field(() => BooleanNullableFilter, {
+    nullable: true,
+  })
+  isActive?: BooleanNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  accommodation?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  student?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: IntNullableFilter,
+  })
+  @Type(() => IntNullableFilter)
+  @IsOptional()
+  @Field(() => IntNullableFilter, {
+    nullable: true,
+  })
+  stayDurationMonths?: IntNullableFilter;
 }
 
 export { CommentWhereInput as CommentWhereInput };

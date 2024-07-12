@@ -13,10 +13,15 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional, ValidateNested } from "class-validator";
+import { IsOptional, ValidateNested, IsEnum } from "class-validator";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { RoomListRelationFilter } from "../../room/base/RoomListRelationFilter";
 import { ReviewListRelationFilter } from "../../review/base/ReviewListRelationFilter";
+import { JsonFilter } from "../../util/JsonFilter";
+import { EnumPropertyAccommodationStatus } from "./EnumPropertyAccommodationStatus";
+import { EnumPropertyRoomType } from "./EnumPropertyRoomType";
+import { BooleanNullableFilter } from "../../util/BooleanNullableFilter";
+import { FloatNullableFilter } from "../../util/FloatNullableFilter";
 
 @InputType()
 class PropertyWhereInput {
@@ -98,6 +103,116 @@ class PropertyWhereInput {
     nullable: true,
   })
   reviews?: ReviewListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: JsonFilter,
+  })
+  @Type(() => JsonFilter)
+  @IsOptional()
+  @Field(() => JsonFilter, {
+    nullable: true,
+  })
+  propertyPictures?: JsonFilter;
+
+  @ApiProperty({
+    required: false,
+    type: JsonFilter,
+  })
+  @Type(() => JsonFilter)
+  @IsOptional()
+  @Field(() => JsonFilter, {
+    nullable: true,
+  })
+  roomPictures?: JsonFilter;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumPropertyAccommodationStatus,
+  })
+  @IsEnum(EnumPropertyAccommodationStatus)
+  @IsOptional()
+  @Field(() => EnumPropertyAccommodationStatus, {
+    nullable: true,
+  })
+  accommodationStatus?: "Option1";
+
+  @ApiProperty({
+    required: false,
+    enum: EnumPropertyRoomType,
+  })
+  @IsEnum(EnumPropertyRoomType)
+  @IsOptional()
+  @Field(() => EnumPropertyRoomType, {
+    nullable: true,
+  })
+  roomType?: "Option1";
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  accommodationProvider?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  location?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: BooleanNullableFilter,
+  })
+  @Type(() => BooleanNullableFilter)
+  @IsOptional()
+  @Field(() => BooleanNullableFilter, {
+    nullable: true,
+  })
+  waterIncluded?: BooleanNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: BooleanNullableFilter,
+  })
+  @Type(() => BooleanNullableFilter)
+  @IsOptional()
+  @Field(() => BooleanNullableFilter, {
+    nullable: true,
+  })
+  electricityIncluded?: BooleanNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: FloatNullableFilter,
+  })
+  @Type(() => FloatNullableFilter)
+  @IsOptional()
+  @Field(() => FloatNullableFilter, {
+    nullable: true,
+  })
+  wifiAmount?: FloatNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: BooleanNullableFilter,
+  })
+  @Type(() => BooleanNullableFilter)
+  @IsOptional()
+  @Field(() => BooleanNullableFilter, {
+    nullable: true,
+  })
+  wifiIncluded?: BooleanNullableFilter;
 }
 
 export { PropertyWhereInput as PropertyWhereInput };

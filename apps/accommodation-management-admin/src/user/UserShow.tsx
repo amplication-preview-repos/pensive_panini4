@@ -40,6 +40,11 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
             <ReferenceField label="user" source="user.id" reference="User">
               <TextField source={USER_TITLE_FIELD} />
             </ReferenceField>
+            <TextField label="surname" source="surname" />
+            <TextField label="age" source="age" />
+            <TextField label="requestedRoomType" source="requestedRoomType" />
+            <TextField label="name" source="name" />
+            <TextField label="institution" source="institution" />
           </Datagrid>
         </ReferenceManyField>
       </SimpleShowLayout>

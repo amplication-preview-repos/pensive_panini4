@@ -11,12 +11,18 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
+
 import {
   IsString,
   MaxLength,
   IsOptional,
   ValidateNested,
+  IsBoolean,
+  IsInt,
+  Min,
+  Max,
 } from "class-validator";
+
 import { PostWhereUniqueInput } from "../../post/base/PostWhereUniqueInput";
 import { Type } from "class-transformer";
 
@@ -57,6 +63,54 @@ class CommentUpdateInput {
     nullable: true,
   })
   post?: PostWhereUniqueInput | null;
+
+  @ApiProperty({
+    required: false,
+    type: Boolean,
+  })
+  @IsBoolean()
+  @IsOptional()
+  @Field(() => Boolean, {
+    nullable: true,
+  })
+  isActive?: boolean | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  accommodation?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  student?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsInt()
+  @Min(-999999999)
+  @Max(999999999)
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  stayDurationMonths?: number | null;
 }
 
 export { CommentUpdateInput as CommentUpdateInput };

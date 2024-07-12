@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import {
   Show,
   SimpleShowLayout,
@@ -6,7 +7,9 @@ import {
   TextField,
   DateField,
   ReferenceField,
+  BooleanField,
 } from "react-admin";
+
 import { POST_TITLE_FIELD } from "../post/PostTitle";
 
 export const CommentShow = (props: ShowProps): React.ReactElement => {
@@ -21,6 +24,10 @@ export const CommentShow = (props: ShowProps): React.ReactElement => {
         <ReferenceField label="post" source="post.id" reference="Post">
           <TextField source={POST_TITLE_FIELD} />
         </ReferenceField>
+        <BooleanField label="isActive" source="isActive" />
+        <TextField label="accommodation" source="accommodation" />
+        <TextField label="student" source="student" />
+        <TextField label="stayDurationMonths" source="stayDurationMonths" />
       </SimpleShowLayout>
     </Show>
   );

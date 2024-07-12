@@ -8,4 +8,14 @@ export type PropertyOrderByInput = {
   description?: SortOrder;
   name?: SortOrder;
   provider?: SortOrder;
+  propertyPictures?: SortOrder;
+  roomPictures?: SortOrder;
+  accommodationStatus?: SortOrder;
+  roomType?: SortOrder;
+  accommodationProvider?: SortOrder;
+  location?: SortOrder;
+  waterIncluded?: SortOrder;
+  electricityIncluded?: SortOrder;
+  wifiAmount?: SortOrder;
+  wifiIncluded?: SortOrder;
 };

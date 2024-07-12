@@ -53,6 +53,11 @@ export class CommentControllerBase {
             id: true,
           },
         },
+
+        isActive: true,
+        accommodation: true,
+        student: true,
+        stayDurationMonths: true,
       },
     });
   }
@@ -76,6 +81,11 @@ export class CommentControllerBase {
             id: true,
           },
         },
+
+        isActive: true,
+        accommodation: true,
+        student: true,
+        stayDurationMonths: true,
       },
     });
   }
@@ -100,6 +110,11 @@ export class CommentControllerBase {
             id: true,
           },
         },
+
+        isActive: true,
+        accommodation: true,
+        student: true,
+        stayDurationMonths: true,
       },
     });
     if (result === null) {
@@ -141,6 +156,11 @@ export class CommentControllerBase {
               id: true,
             },
           },
+
+          isActive: true,
+          accommodation: true,
+          student: true,
+          stayDurationMonths: true,
         },
       });
     } catch (error) {
@@ -174,6 +194,11 @@ export class CommentControllerBase {
               id: true,
             },
           },
+
+          isActive: true,
+          accommodation: true,
+          student: true,
+          stayDurationMonths: true,
         },
       });
     } catch (error) {

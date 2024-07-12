@@ -7,6 +7,9 @@ import {
   TextInput,
   ReferenceArrayInput,
   SelectArrayInput,
+  SelectInput,
+  BooleanInput,
+  NumberInput,
 } from "react-admin";
 
 import { RoomTitle } from "../room/RoomTitle";
@@ -36,6 +39,36 @@ export const PropertyEdit = (props: EditProps): React.ReactElement => {
         >
           <SelectArrayInput optionText={ReviewTitle} />
         </ReferenceArrayInput>
+        <div />
+        <div />
+        <SelectInput
+          source="accommodationStatus"
+          label="accommodationStatus"
+          choices={[{ label: "Option 1", value: "Option1" }]}
+          optionText="label"
+          allowEmpty
+          optionValue="value"
+        />
+        <SelectInput
+          source="roomType"
+          label="roomType"
+          choices={[{ label: "Option 1", value: "Option1" }]}
+          optionText="label"
+          allowEmpty
+          optionValue="value"
+        />
+        <TextInput
+          label="accommodationProvider"
+          source="accommodationProvider"
+        />
+        <TextInput label="location" source="location" />
+        <BooleanInput label="waterIncluded" source="waterIncluded" />
+        <BooleanInput
+          label="electricityIncluded"
+          source="electricityIncluded"
+        />
+        <NumberInput label="wifiAmount" source="wifiAmount" />
+        <BooleanInput label="wifiIncluded" source="wifiIncluded" />
       </SimpleForm>
     </Edit>
   );

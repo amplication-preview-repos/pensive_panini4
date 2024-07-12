@@ -8,4 +8,9 @@ export type ProfileOrderByInput = {
   bio?: SortOrder;
   profilePicture?: SortOrder;
   userId?: SortOrder;
+  surname?: SortOrder;
+  age?: SortOrder;
+  requestedRoomType?: SortOrder;
+  name?: SortOrder;
+  institution?: SortOrder;
 };

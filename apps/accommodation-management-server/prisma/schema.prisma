@@ -20,15 +20,25 @@ model Room {
 }
 
 model Property {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  address     String?
-  description String?
-  name        String?
-  provider    String?
-  rooms       Room[]
-  reviews     Review[]
+  id                    String                           @id @default(cuid())
+  createdAt             DateTime                         @default(now())
+  updatedAt             DateTime                         @updatedAt
+  address               String?
+  description           String?
+  name                  String?
+  provider              String?
+  rooms                 Room[]
+  reviews               Review[]
+  propertyPictures      Json?
+  roomPictures          Json?
+  accommodationStatus   EnumPropertyAccommodationStatus?
+  roomType              EnumPropertyRoomType?
+  accommodationProvider String?
+  location              String?
+  waterIncluded         Boolean?
+  electricityIncluded   Boolean?
+  wifiAmount            Float?
+  wifiIncluded          Boolean?
 }
 
 model Review {
@@ -76,24 +86,33 @@ model User {
 }
 
 model Profile {
-  id             String   @id @default(cuid())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  username       String?
-  bio            String?
-  profilePicture Json?
-  user           User?    @relation(fields: [userId], references: [id])
-  userId         String?
+  id                String                        @id @default(cuid())
+  createdAt         DateTime                      @default(now())
+  updatedAt         DateTime                      @updatedAt
+  username          String?
+  bio               String?
+  profilePicture    Json?
+  user              User?                         @relation(fields: [userId], references: [id])
+  userId            String?
+  surname           String?
+  age               Int?
+  requestedRoomType EnumProfileRequestedRoomType?
+  name              String?
+  institution       String?
 }
 
 model Comment {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  content   String?
-  author    String?
-  post      Post?    @relation(fields: [postId], references: [id])
-  postId    String?
+  id                 String   @id @default(cuid())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  content            String?
+  author             String?
+  post               Post?    @relation(fields: [postId], references: [id])
+  postId             String?
+  isActive           Boolean?
+  accommodation      String?
+  student            String?
+  stayDurationMonths Int?
 }
 
 model Post {
@@ -126,5 +145,17 @@ model Chat {
 }
 
 enum EnumRoomTypeField {
+  Option1
+}
+
+enum EnumPropertyAccommodationStatus {
+  Option1
+}
+
+enum EnumPropertyRoomType {
+  Option1
+}
+
+enum EnumProfileRequestedRoomType {
   Option1
 }

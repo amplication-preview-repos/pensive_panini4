@@ -6,6 +6,7 @@ import {
   ShowProps,
   TextField,
   DateField,
+  BooleanField,
   ReferenceManyField,
   Datagrid,
   ReferenceField,
@@ -24,6 +25,22 @@ export const PropertyShow = (props: ShowProps): React.ReactElement => {
         <TextField label="description" source="description" />
         <TextField label="name" source="name" />
         <TextField label="provider" source="provider" />
+        <TextField label="propertyPictures" source="propertyPictures" />
+        <TextField label="roomPictures" source="roomPictures" />
+        <TextField label="accommodationStatus" source="accommodationStatus" />
+        <TextField label="roomType" source="roomType" />
+        <TextField
+          label="accommodationProvider"
+          source="accommodationProvider"
+        />
+        <TextField label="location" source="location" />
+        <BooleanField label="waterIncluded" source="waterIncluded" />
+        <BooleanField
+          label="electricityIncluded"
+          source="electricityIncluded"
+        />
+        <TextField label="wifiAmount" source="wifiAmount" />
+        <BooleanField label="wifiIncluded" source="wifiIncluded" />
         <ReferenceManyField reference="Room" target="propertyId" label="Rooms">
           <Datagrid rowClick="show">
             <TextField label="ID" source="id" />

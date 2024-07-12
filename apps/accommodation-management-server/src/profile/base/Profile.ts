@@ -11,18 +11,25 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
+
 import {
   IsString,
   IsDate,
   MaxLength,
   IsOptional,
   ValidateNested,
+  IsInt,
+  Min,
+  Max,
+  IsEnum,
 } from "class-validator";
+
 import { Type } from "class-transformer";
 import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { User } from "../../user/base/User";
+import { EnumProfileRequestedRoomType } from "./EnumProfileRequestedRoomType";
 
 @ObjectType()
 class Profile {
@@ -92,6 +99,66 @@ class Profile {
   @Type(() => User)
   @IsOptional()
   user?: User | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  surname!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsInt()
+  @Min(-999999999)
+  @Max(999999999)
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  age!: number | null;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumProfileRequestedRoomType,
+  })
+  @IsEnum(EnumProfileRequestedRoomType)
+  @IsOptional()
+  @Field(() => EnumProfileRequestedRoomType, {
+    nullable: true,
+  })
+  requestedRoomType?: "Option1" | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  name!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  institution!: string | null;
 }
 
 export { Profile as Profile };

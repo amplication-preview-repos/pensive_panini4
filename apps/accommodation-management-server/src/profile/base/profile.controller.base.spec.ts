@@ -23,6 +23,10 @@ const CREATE_INPUT = {
   updatedAt: new Date(),
   username: "exampleUsername",
   bio: "exampleBio",
+  surname: "exampleSurname",
+  age: 42,
+  name: "exampleName",
+  institution: "exampleInstitution",
 };
 const CREATE_RESULT = {
   id: "exampleId",
@@ -30,6 +34,10 @@ const CREATE_RESULT = {
   updatedAt: new Date(),
   username: "exampleUsername",
   bio: "exampleBio",
+  surname: "exampleSurname",
+  age: 42,
+  name: "exampleName",
+  institution: "exampleInstitution",
 };
 const FIND_MANY_RESULT = [
   {
@@ -38,6 +46,10 @@ const FIND_MANY_RESULT = [
     updatedAt: new Date(),
     username: "exampleUsername",
     bio: "exampleBio",
+    surname: "exampleSurname",
+    age: 42,
+    name: "exampleName",
+    institution: "exampleInstitution",
   },
 ];
 const FIND_ONE_RESULT = {
@@ -46,6 +58,10 @@ const FIND_ONE_RESULT = {
   updatedAt: new Date(),
   username: "exampleUsername",
   bio: "exampleBio",
+  surname: "exampleSurname",
+  age: 42,
+  name: "exampleName",
+  institution: "exampleInstitution",
 };
 
 const service = {

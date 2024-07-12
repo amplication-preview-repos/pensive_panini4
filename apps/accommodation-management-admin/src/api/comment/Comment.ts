@@ -7,4 +7,8 @@ export type Comment = {
   content: string | null;
   author: string | null;
   post?: Post | null;
+  isActive: boolean | null;
+  accommodation: string | null;
+  student: string | null;
+  stayDurationMonths: number | null;
 };

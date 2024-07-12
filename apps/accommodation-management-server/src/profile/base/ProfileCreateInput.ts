@@ -16,12 +16,17 @@ import {
   MaxLength,
   IsOptional,
   ValidateNested,
+  IsInt,
+  Min,
+  Max,
+  IsEnum,
 } from "class-validator";
 import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { Type } from "class-transformer";
+import { EnumProfileRequestedRoomType } from "./EnumProfileRequestedRoomType";
 
 @InputType()
 class ProfileCreateInput {
@@ -70,6 +75,66 @@ class ProfileCreateInput {
     nullable: true,
   })
   user?: UserWhereUniqueInput | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  surname?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsInt()
+  @Min(-999999999)
+  @Max(999999999)
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  age?: number | null;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumProfileRequestedRoomType,
+  })
+  @IsEnum(EnumProfileRequestedRoomType)
+  @IsOptional()
+  @Field(() => EnumProfileRequestedRoomType, {
+    nullable: true,
+  })
+  requestedRoomType?: "Option1" | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  name?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  institution?: string | null;
 }
 
 export { ProfileCreateInput as ProfileCreateInput };

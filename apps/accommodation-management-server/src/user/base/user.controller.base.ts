@@ -178,6 +178,12 @@ export class UserControllerBase {
             id: true,
           },
         },
+
+        surname: true,
+        age: true,
+        requestedRoomType: true,
+        name: true,
+        institution: true,
       },
     });
     if (results === null) {
