@@ -1,15 +1,22 @@
 import { Module } from "@nestjs/common";
-import { RoomModule } from "./room/room.module";
 import { PropertyModule } from "./property/property.module";
+import { RoomModule } from "./room/room.module";
 import { ReviewModule } from "./review/review.module";
 import { AppointmentModule } from "./appointment/appointment.module";
 import { DocumentModule } from "./document/document.module";
 import { UserModule } from "./user/user.module";
 import { ProfileModule } from "./profile/profile.module";
 import { CommentModule } from "./comment/comment.module";
+import { ChatModule } from "./chat/chat.module";
 import { PostModule } from "./post/post.module";
 import { VideoCallModule } from "./videoCall/videoCall.module";
-import { ChatModule } from "./chat/chat.module";
+import { AdminModule } from "./admin/admin.module";
+import { StudentModule } from "./student/student.module";
+import { StaffModule } from "./staff/staff.module";
+import { AccommodationProviderModule } from "./accommodationProvider/accommodationProvider.module";
+import { UniversityModule } from "./university/university.module";
+import { RecommendationModule } from "./recommendation/recommendation.module";
+import { AccommodationModule } from "./Accommodation/accommodation.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
@@ -22,17 +29,24 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 @Module({
   controllers: [],
   imports: [
-    RoomModule,
     PropertyModule,
+    RoomModule,
     ReviewModule,
     AppointmentModule,
     DocumentModule,
     UserModule,
     ProfileModule,
     CommentModule,
+    ChatModule,
     PostModule,
     VideoCallModule,
-    ChatModule,
+    AdminModule,
+    StudentModule,
+    StaffModule,
+    AccommodationProviderModule,
+    UniversityModule,
+    RecommendationModule,
+    AccommodationModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,

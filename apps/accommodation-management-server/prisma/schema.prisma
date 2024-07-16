@@ -7,18 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Room {
-  id           String             @id @default(cuid())
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  name         String?
-  typeField    EnumRoomTypeField?
-  price        Float?
-  property     Property?          @relation(fields: [propertyId], references: [id])
-  propertyId   String?
-  appointments Appointment[]
-}
-
 model Property {
   id                    String                           @id @default(cuid())
   createdAt             DateTime                         @default(now())
@@ -39,6 +27,18 @@ model Property {
   electricityIncluded   Boolean?
   wifiAmount            Float?
   wifiIncluded          Boolean?
+}
+
+model Room {
+  id           String             @id @default(cuid())
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  name         String?
+  typeField    EnumRoomTypeField?
+  price        Float?
+  property     Property?          @relation(fields: [propertyId], references: [id])
+  propertyId   String?
+  appointments Appointment[]
 }
 
 model Review {
@@ -115,6 +115,16 @@ model Comment {
   stayDurationMonths Int?
 }
 
+model Chat {
+  id                     String    @id @default(cuid())
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  messages               String?
+  chatCreatedAt          DateTime?
+  chatCreatedAtTimestamp DateTime?
+  chatMessages           String?
+}
+
 model Post {
   id        String    @id @default(cuid())
   createdAt DateTime  @default(now())
@@ -134,18 +144,68 @@ model VideoCall {
   callStart DateTime?
 }
 
-model Chat {
-  id                     String    @id @default(cuid())
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
-  messages               String?
-  chatCreatedAt          DateTime?
-  chatCreatedAtTimestamp DateTime?
-  chatMessages           String?
+model Admin {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String?
+  password  String?
 }
 
-enum EnumRoomTypeField {
-  Option1
+model Student {
+  id              String           @id @default(cuid())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  email           String?
+  password        String?
+  university      University?      @relation(fields: [universityId], references: [id])
+  universityId    String?
+  location        String?
+  recommendations Recommendation[]
+}
+
+model Staff {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String?
+  password  String?
+}
+
+model AccommodationProvider {
+  id                  String                             @id @default(cuid())
+  createdAt           DateTime                           @default(now())
+  updatedAt           DateTime                           @updatedAt
+  email               String?
+  password            String?
+  roomType            EnumAccommodationProviderRoomType?
+  location            String?
+  electricityIncluded Boolean?
+  waterIncluded       Boolean?
+  price               Int?
+  name                String?
+  popularity          Int?
+}
+
+model University {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String?
+  location  String?
+  students  Student[]
+}
+
+model Recommendation {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String?
+  description String?
+  category    String?
+  location    String?
+  student     Student? @relation(fields: [studentId], references: [id])
+  studentId   String?
 }
 
 enum EnumPropertyAccommodationStatus {
@@ -156,6 +216,14 @@ enum EnumPropertyRoomType {
   Option1
 }
 
+enum EnumRoomTypeField {
+  Option1
+}
+
 enum EnumProfileRequestedRoomType {
+  Option1
+}
+
+enum EnumAccommodationProviderRoomType {
   Option1
 }

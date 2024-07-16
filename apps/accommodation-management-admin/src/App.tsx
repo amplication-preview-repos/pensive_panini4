@@ -5,14 +5,14 @@ import { theme } from "./theme/theme";
 import Login from "./Login";
 import "./App.scss";
 import Dashboard from "./pages/Dashboard";
-import { RoomList } from "./room/RoomList";
-import { RoomCreate } from "./room/RoomCreate";
-import { RoomEdit } from "./room/RoomEdit";
-import { RoomShow } from "./room/RoomShow";
 import { PropertyList } from "./property/PropertyList";
 import { PropertyCreate } from "./property/PropertyCreate";
 import { PropertyEdit } from "./property/PropertyEdit";
 import { PropertyShow } from "./property/PropertyShow";
+import { RoomList } from "./room/RoomList";
+import { RoomCreate } from "./room/RoomCreate";
+import { RoomEdit } from "./room/RoomEdit";
+import { RoomShow } from "./room/RoomShow";
 import { ReviewList } from "./review/ReviewList";
 import { ReviewCreate } from "./review/ReviewCreate";
 import { ReviewEdit } from "./review/ReviewEdit";
@@ -37,6 +37,10 @@ import { CommentList } from "./comment/CommentList";
 import { CommentCreate } from "./comment/CommentCreate";
 import { CommentEdit } from "./comment/CommentEdit";
 import { CommentShow } from "./comment/CommentShow";
+import { ChatList } from "./chat/ChatList";
+import { ChatCreate } from "./chat/ChatCreate";
+import { ChatEdit } from "./chat/ChatEdit";
+import { ChatShow } from "./chat/ChatShow";
 import { PostList } from "./post/PostList";
 import { PostCreate } from "./post/PostCreate";
 import { PostEdit } from "./post/PostEdit";
@@ -45,10 +49,30 @@ import { VideoCallList } from "./videoCall/VideoCallList";
 import { VideoCallCreate } from "./videoCall/VideoCallCreate";
 import { VideoCallEdit } from "./videoCall/VideoCallEdit";
 import { VideoCallShow } from "./videoCall/VideoCallShow";
-import { ChatList } from "./chat/ChatList";
-import { ChatCreate } from "./chat/ChatCreate";
-import { ChatEdit } from "./chat/ChatEdit";
-import { ChatShow } from "./chat/ChatShow";
+import { AdminList } from "./admin/AdminList";
+import { AdminCreate } from "./admin/AdminCreate";
+import { AdminEdit } from "./admin/AdminEdit";
+import { AdminShow } from "./admin/AdminShow";
+import { StudentList } from "./student/StudentList";
+import { StudentCreate } from "./student/StudentCreate";
+import { StudentEdit } from "./student/StudentEdit";
+import { StudentShow } from "./student/StudentShow";
+import { StaffList } from "./staff/StaffList";
+import { StaffCreate } from "./staff/StaffCreate";
+import { StaffEdit } from "./staff/StaffEdit";
+import { StaffShow } from "./staff/StaffShow";
+import { AccommodationProviderList } from "./accommodationProvider/AccommodationProviderList";
+import { AccommodationProviderCreate } from "./accommodationProvider/AccommodationProviderCreate";
+import { AccommodationProviderEdit } from "./accommodationProvider/AccommodationProviderEdit";
+import { AccommodationProviderShow } from "./accommodationProvider/AccommodationProviderShow";
+import { UniversityList } from "./university/UniversityList";
+import { UniversityCreate } from "./university/UniversityCreate";
+import { UniversityEdit } from "./university/UniversityEdit";
+import { UniversityShow } from "./university/UniversityShow";
+import { RecommendationList } from "./recommendation/RecommendationList";
+import { RecommendationCreate } from "./recommendation/RecommendationCreate";
+import { RecommendationEdit } from "./recommendation/RecommendationEdit";
+import { RecommendationShow } from "./recommendation/RecommendationShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -76,18 +100,18 @@ const App = (): React.ReactElement => {
         loginPage={Login}
       >
         <Resource
-          name="Room"
-          list={RoomList}
-          edit={RoomEdit}
-          create={RoomCreate}
-          show={RoomShow}
-        />
-        <Resource
           name="Property"
           list={PropertyList}
           edit={PropertyEdit}
           create={PropertyCreate}
           show={PropertyShow}
+        />
+        <Resource
+          name="Room"
+          list={RoomList}
+          edit={RoomEdit}
+          create={RoomCreate}
+          show={RoomShow}
         />
         <Resource
           name="Review"
@@ -132,6 +156,13 @@ const App = (): React.ReactElement => {
           show={CommentShow}
         />
         <Resource
+          name="Chat"
+          list={ChatList}
+          edit={ChatEdit}
+          create={ChatCreate}
+          show={ChatShow}
+        />
+        <Resource
           name="Post"
           list={PostList}
           edit={PostEdit}
@@ -146,11 +177,46 @@ const App = (): React.ReactElement => {
           show={VideoCallShow}
         />
         <Resource
-          name="Chat"
-          list={ChatList}
-          edit={ChatEdit}
-          create={ChatCreate}
-          show={ChatShow}
+          name="Admin"
+          list={AdminList}
+          edit={AdminEdit}
+          create={AdminCreate}
+          show={AdminShow}
+        />
+        <Resource
+          name="Student"
+          list={StudentList}
+          edit={StudentEdit}
+          create={StudentCreate}
+          show={StudentShow}
+        />
+        <Resource
+          name="Staff"
+          list={StaffList}
+          edit={StaffEdit}
+          create={StaffCreate}
+          show={StaffShow}
+        />
+        <Resource
+          name="AccommodationProvider"
+          list={AccommodationProviderList}
+          edit={AccommodationProviderEdit}
+          create={AccommodationProviderCreate}
+          show={AccommodationProviderShow}
+        />
+        <Resource
+          name="University"
+          list={UniversityList}
+          edit={UniversityEdit}
+          create={UniversityCreate}
+          show={UniversityShow}
+        />
+        <Resource
+          name="Recommendation"
+          list={RecommendationList}
+          edit={RecommendationEdit}
+          create={RecommendationCreate}
+          show={RecommendationShow}
         />
       </Admin>
     </div>
