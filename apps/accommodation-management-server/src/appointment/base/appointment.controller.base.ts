@@ -16,7 +16,11 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import * as nestAccessControl from "nest-access-control";
+import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { AppointmentService } from "../appointment.service";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AppointmentCreateInput } from "./AppointmentCreateInput";
 import { Appointment } from "./Appointment";
 import { Post } from "../../post/base/Post";
@@ -24,10 +28,24 @@ import { AppointmentFindManyArgs } from "./AppointmentFindManyArgs";
 import { AppointmentWhereUniqueInput } from "./AppointmentWhereUniqueInput";
 import { AppointmentUpdateInput } from "./AppointmentUpdateInput";
 
+@swagger.ApiBearerAuth()
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class AppointmentControllerBase {
-  constructor(protected readonly service: AppointmentService) {}
+  constructor(
+    protected readonly service: AppointmentService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Appointment })
+  @nestAccessControl.UseRoles({
+    resource: "Appointment",
+    action: "create",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async createAppointment(
     @common.Body() data: AppointmentCreateInput
   ): Promise<Appointment> {
@@ -57,9 +75,18 @@ export class AppointmentControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [Appointment] })
   @ApiNestedQuery(AppointmentFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Appointment",
+    action: "read",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async appointments(@common.Req() request: Request): Promise<Appointment[]> {
     const args = plainToClass(AppointmentFindManyArgs, request.query);
     return this.service.appointments({
@@ -80,9 +107,18 @@ export class AppointmentControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Appointment })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Appointment",
+    action: "read",
+    possession: "own",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async appointment(
     @common.Param() params: AppointmentWhereUniqueInput
   ): Promise<Appointment | null> {
@@ -110,9 +146,18 @@ export class AppointmentControllerBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Appointment })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Appointment",
+    action: "update",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async updateAppointment(
     @common.Param() params: AppointmentWhereUniqueInput,
     @common.Body() data: AppointmentUpdateInput
@@ -156,6 +201,14 @@ export class AppointmentControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Appointment })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Appointment",
+    action: "delete",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async deleteAppointment(
     @common.Param() params: AppointmentWhereUniqueInput
   ): Promise<Appointment | null> {

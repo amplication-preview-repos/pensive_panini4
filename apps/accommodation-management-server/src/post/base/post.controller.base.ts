@@ -16,7 +16,11 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import * as nestAccessControl from "nest-access-control";
+import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { PostService } from "../post.service";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { PostCreateInput } from "./PostCreateInput";
 import { Post } from "./Post";
 import { PostFindManyArgs } from "./PostFindManyArgs";
@@ -26,10 +30,24 @@ import { CommentFindManyArgs } from "../../comment/base/CommentFindManyArgs";
 import { Comment } from "../../comment/base/Comment";
 import { CommentWhereUniqueInput } from "../../comment/base/CommentWhereUniqueInput";
 
+@swagger.ApiBearerAuth()
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class PostControllerBase {
-  constructor(protected readonly service: PostService) {}
+  constructor(
+    protected readonly service: PostService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Post })
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "create",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async createPost(@common.Body() data: PostCreateInput): Promise<Post> {
     return await this.service.createPost({
       data: data,
@@ -45,9 +63,18 @@ export class PostControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [Post] })
   @ApiNestedQuery(PostFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "read",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async posts(@common.Req() request: Request): Promise<Post[]> {
     const args = plainToClass(PostFindManyArgs, request.query);
     return this.service.posts({
@@ -64,9 +91,18 @@ export class PostControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Post })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "read",
+    possession: "own",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async post(
     @common.Param() params: PostWhereUniqueInput
   ): Promise<Post | null> {
@@ -90,9 +126,18 @@ export class PostControllerBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Post })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "update",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async updatePost(
     @common.Param() params: PostWhereUniqueInput,
     @common.Body() data: PostUpdateInput
@@ -124,6 +169,14 @@ export class PostControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Post })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "delete",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async deletePost(
     @common.Param() params: PostWhereUniqueInput
   ): Promise<Post | null> {
@@ -150,8 +203,14 @@ export class PostControllerBase {
     }
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id/comments")
   @ApiNestedQuery(CommentFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Comment",
+    action: "read",
+    possession: "any",
+  })
   async findComments(
     @common.Req() request: Request,
     @common.Param() params: PostWhereUniqueInput
@@ -187,6 +246,11 @@ export class PostControllerBase {
   }
 
   @common.Post("/:id/comments")
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "update",
+    possession: "any",
+  })
   async connectComments(
     @common.Param() params: PostWhereUniqueInput,
     @common.Body() body: CommentWhereUniqueInput[]
@@ -204,6 +268,11 @@ export class PostControllerBase {
   }
 
   @common.Patch("/:id/comments")
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "update",
+    possession: "any",
+  })
   async updateComments(
     @common.Param() params: PostWhereUniqueInput,
     @common.Body() body: CommentWhereUniqueInput[]
@@ -221,6 +290,11 @@ export class PostControllerBase {
   }
 
   @common.Delete("/:id/comments")
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "update",
+    possession: "any",
+  })
   async disconnectComments(
     @common.Param() params: PostWhereUniqueInput,
     @common.Body() body: CommentWhereUniqueInput[]

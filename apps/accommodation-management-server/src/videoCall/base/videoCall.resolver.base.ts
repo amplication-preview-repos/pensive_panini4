@@ -13,6 +13,12 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
+import * as nestAccessControl from "nest-access-control";
+import * as gqlACGuard from "../../auth/gqlAC.guard";
+import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
+import * as common from "@nestjs/common";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { VideoCall } from "./VideoCall";
 import { VideoCallCountArgs } from "./VideoCallCountArgs";
 import { VideoCallFindManyArgs } from "./VideoCallFindManyArgs";
@@ -21,10 +27,20 @@ import { CreateVideoCallArgs } from "./CreateVideoCallArgs";
 import { UpdateVideoCallArgs } from "./UpdateVideoCallArgs";
 import { DeleteVideoCallArgs } from "./DeleteVideoCallArgs";
 import { VideoCallService } from "../videoCall.service";
+@common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => VideoCall)
 export class VideoCallResolverBase {
-  constructor(protected readonly service: VideoCallService) {}
+  constructor(
+    protected readonly service: VideoCallService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
 
+  @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "read",
+    possession: "any",
+  })
   async _videoCallsMeta(
     @graphql.Args() args: VideoCallCountArgs
   ): Promise<MetaQueryPayload> {
@@ -34,14 +50,26 @@ export class VideoCallResolverBase {
     };
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [VideoCall])
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "read",
+    possession: "any",
+  })
   async videoCalls(
     @graphql.Args() args: VideoCallFindManyArgs
   ): Promise<VideoCall[]> {
     return this.service.videoCalls(args);
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => VideoCall, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "read",
+    possession: "own",
+  })
   async videoCall(
     @graphql.Args() args: VideoCallFindUniqueArgs
   ): Promise<VideoCall | null> {
@@ -52,7 +80,13 @@ export class VideoCallResolverBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => VideoCall)
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "create",
+    possession: "any",
+  })
   async createVideoCall(
     @graphql.Args() args: CreateVideoCallArgs
   ): Promise<VideoCall> {
@@ -62,7 +96,13 @@ export class VideoCallResolverBase {
     });
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => VideoCall)
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "update",
+    possession: "any",
+  })
   async updateVideoCall(
     @graphql.Args() args: UpdateVideoCallArgs
   ): Promise<VideoCall | null> {
@@ -82,6 +122,11 @@ export class VideoCallResolverBase {
   }
 
   @graphql.Mutation(() => VideoCall)
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "delete",
+    possession: "any",
+  })
   async deleteVideoCall(
     @graphql.Args() args: DeleteVideoCallArgs
   ): Promise<VideoCall | null> {

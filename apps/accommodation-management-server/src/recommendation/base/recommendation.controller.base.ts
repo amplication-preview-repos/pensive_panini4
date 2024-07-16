@@ -16,7 +16,11 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import * as nestAccessControl from "nest-access-control";
+import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { RecommendationService } from "../recommendation.service";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { RecommendationCreateInput } from "./RecommendationCreateInput";
 import { Recommendation } from "./Recommendation";
 import { Post } from "../../post/base/Post";
@@ -24,10 +28,24 @@ import { RecommendationFindManyArgs } from "./RecommendationFindManyArgs";
 import { RecommendationWhereUniqueInput } from "./RecommendationWhereUniqueInput";
 import { RecommendationUpdateInput } from "./RecommendationUpdateInput";
 
+@swagger.ApiBearerAuth()
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class RecommendationControllerBase {
-  constructor(protected readonly service: RecommendationService) {}
+  constructor(
+    protected readonly service: RecommendationService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Recommendation })
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "create",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async createRecommendation(
     @common.Body() data: RecommendationCreateInput
   ): Promise<Recommendation> {
@@ -59,9 +77,18 @@ export class RecommendationControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [Recommendation] })
   @ApiNestedQuery(RecommendationFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "read",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async recommendations(
     @common.Req() request: Request
   ): Promise<Recommendation[]> {
@@ -86,9 +113,18 @@ export class RecommendationControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Recommendation })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "read",
+    possession: "own",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async recommendation(
     @common.Param() params: RecommendationWhereUniqueInput
   ): Promise<Recommendation | null> {
@@ -118,9 +154,18 @@ export class RecommendationControllerBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Recommendation })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "update",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async updateRecommendation(
     @common.Param() params: RecommendationWhereUniqueInput,
     @common.Body() data: RecommendationUpdateInput
@@ -166,6 +211,14 @@ export class RecommendationControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Recommendation })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "delete",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async deleteRecommendation(
     @common.Param() params: RecommendationWhereUniqueInput
   ): Promise<Recommendation | null> {

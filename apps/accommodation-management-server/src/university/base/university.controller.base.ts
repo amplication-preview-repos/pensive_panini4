@@ -16,7 +16,11 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import * as nestAccessControl from "nest-access-control";
+import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { UniversityService } from "../university.service";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { UniversityCreateInput } from "./UniversityCreateInput";
 import { University } from "./University";
 import { Post } from "../../post/base/Post";
@@ -27,10 +31,24 @@ import { StudentFindManyArgs } from "../../student/base/StudentFindManyArgs";
 import { Student } from "../../student/base/Student";
 import { StudentWhereUniqueInput } from "../../student/base/StudentWhereUniqueInput";
 
+@swagger.ApiBearerAuth()
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class UniversityControllerBase {
-  constructor(protected readonly service: UniversityService) {}
+  constructor(
+    protected readonly service: UniversityService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
   @swagger.ApiCreatedResponse({ type: University })
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "create",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async createUniversity(
     @common.Body() data: UniversityCreateInput
   ): Promise<University> {
@@ -46,9 +64,18 @@ export class UniversityControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [University] })
   @ApiNestedQuery(UniversityFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "read",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async universities(@common.Req() request: Request): Promise<University[]> {
     const args = plainToClass(UniversityFindManyArgs, request.query);
     return this.service.universities({
@@ -63,9 +90,18 @@ export class UniversityControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: University })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "read",
+    possession: "own",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async university(
     @common.Param() params: UniversityWhereUniqueInput
   ): Promise<University | null> {
@@ -87,9 +123,18 @@ export class UniversityControllerBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: University })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "update",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async updateUniversity(
     @common.Param() params: UniversityWhereUniqueInput,
     @common.Body() data: UniversityUpdateInput
@@ -119,6 +164,14 @@ export class UniversityControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: University })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "delete",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async deleteUniversity(
     @common.Param() params: UniversityWhereUniqueInput
   ): Promise<University | null> {
@@ -143,8 +196,14 @@ export class UniversityControllerBase {
     }
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id/students")
   @ApiNestedQuery(StudentFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "read",
+    possession: "any",
+  })
   async findStudents(
     @common.Req() request: Request,
     @common.Param() params: UniversityWhereUniqueInput
@@ -177,6 +236,11 @@ export class UniversityControllerBase {
   }
 
   @common.Post("/:id/students")
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "update",
+    possession: "any",
+  })
   async connectStudents(
     @common.Param() params: UniversityWhereUniqueInput,
     @common.Body() body: StudentWhereUniqueInput[]
@@ -194,6 +258,11 @@ export class UniversityControllerBase {
   }
 
   @common.Patch("/:id/students")
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "update",
+    possession: "any",
+  })
   async updateStudents(
     @common.Param() params: UniversityWhereUniqueInput,
     @common.Body() body: StudentWhereUniqueInput[]
@@ -211,6 +280,11 @@ export class UniversityControllerBase {
   }
 
   @common.Delete("/:id/students")
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "update",
+    possession: "any",
+  })
   async disconnectStudents(
     @common.Param() params: UniversityWhereUniqueInput,
     @common.Body() body: StudentWhereUniqueInput[]

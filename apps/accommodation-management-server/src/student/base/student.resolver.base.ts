@@ -13,6 +13,12 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
+import * as nestAccessControl from "nest-access-control";
+import * as gqlACGuard from "../../auth/gqlAC.guard";
+import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
+import * as common from "@nestjs/common";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { Student } from "./Student";
 import { StudentCountArgs } from "./StudentCountArgs";
 import { StudentFindManyArgs } from "./StudentFindManyArgs";
@@ -24,10 +30,20 @@ import { RecommendationFindManyArgs } from "../../recommendation/base/Recommenda
 import { Recommendation } from "../../recommendation/base/Recommendation";
 import { University } from "../../university/base/University";
 import { StudentService } from "../student.service";
+@common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Student)
 export class StudentResolverBase {
-  constructor(protected readonly service: StudentService) {}
+  constructor(
+    protected readonly service: StudentService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
 
+  @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "read",
+    possession: "any",
+  })
   async _studentsMeta(
     @graphql.Args() args: StudentCountArgs
   ): Promise<MetaQueryPayload> {
@@ -37,14 +53,26 @@ export class StudentResolverBase {
     };
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [Student])
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "read",
+    possession: "any",
+  })
   async students(
     @graphql.Args() args: StudentFindManyArgs
   ): Promise<Student[]> {
     return this.service.students(args);
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => Student, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "read",
+    possession: "own",
+  })
   async student(
     @graphql.Args() args: StudentFindUniqueArgs
   ): Promise<Student | null> {
@@ -55,7 +83,13 @@ export class StudentResolverBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => Student)
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "create",
+    possession: "any",
+  })
   async createStudent(
     @graphql.Args() args: CreateStudentArgs
   ): Promise<Student> {
@@ -73,7 +107,13 @@ export class StudentResolverBase {
     });
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => Student)
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "update",
+    possession: "any",
+  })
   async updateStudent(
     @graphql.Args() args: UpdateStudentArgs
   ): Promise<Student | null> {
@@ -101,6 +141,11 @@ export class StudentResolverBase {
   }
 
   @graphql.Mutation(() => Student)
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "delete",
+    possession: "any",
+  })
   async deleteStudent(
     @graphql.Args() args: DeleteStudentArgs
   ): Promise<Student | null> {
@@ -116,7 +161,13 @@ export class StudentResolverBase {
     }
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.ResolveField(() => [Recommendation], { name: "recommendations" })
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "read",
+    possession: "any",
+  })
   async findRecommendations(
     @graphql.Parent() parent: Student,
     @graphql.Args() args: RecommendationFindManyArgs
@@ -130,9 +181,15 @@ export class StudentResolverBase {
     return results;
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.ResolveField(() => University, {
     nullable: true,
     name: "university",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "read",
+    possession: "any",
   })
   async getUniversity(
     @graphql.Parent() parent: Student

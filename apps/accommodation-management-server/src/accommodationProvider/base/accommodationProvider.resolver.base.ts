@@ -13,6 +13,12 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
+import * as nestAccessControl from "nest-access-control";
+import * as gqlACGuard from "../../auth/gqlAC.guard";
+import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
+import * as common from "@nestjs/common";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { AccommodationProvider } from "./AccommodationProvider";
 import { AccommodationProviderCountArgs } from "./AccommodationProviderCountArgs";
 import { AccommodationProviderFindManyArgs } from "./AccommodationProviderFindManyArgs";
@@ -21,10 +27,20 @@ import { CreateAccommodationProviderArgs } from "./CreateAccommodationProviderAr
 import { UpdateAccommodationProviderArgs } from "./UpdateAccommodationProviderArgs";
 import { DeleteAccommodationProviderArgs } from "./DeleteAccommodationProviderArgs";
 import { AccommodationProviderService } from "../accommodationProvider.service";
+@common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => AccommodationProvider)
 export class AccommodationProviderResolverBase {
-  constructor(protected readonly service: AccommodationProviderService) {}
+  constructor(
+    protected readonly service: AccommodationProviderService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
 
+  @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "read",
+    possession: "any",
+  })
   async _accommodationProvidersMeta(
     @graphql.Args() args: AccommodationProviderCountArgs
   ): Promise<MetaQueryPayload> {
@@ -34,14 +50,26 @@ export class AccommodationProviderResolverBase {
     };
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [AccommodationProvider])
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "read",
+    possession: "any",
+  })
   async accommodationProviders(
     @graphql.Args() args: AccommodationProviderFindManyArgs
   ): Promise<AccommodationProvider[]> {
     return this.service.accommodationProviders(args);
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => AccommodationProvider, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "read",
+    possession: "own",
+  })
   async accommodationProvider(
     @graphql.Args() args: AccommodationProviderFindUniqueArgs
   ): Promise<AccommodationProvider | null> {
@@ -52,7 +80,13 @@ export class AccommodationProviderResolverBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => AccommodationProvider)
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "create",
+    possession: "any",
+  })
   async createAccommodationProvider(
     @graphql.Args() args: CreateAccommodationProviderArgs
   ): Promise<AccommodationProvider> {
@@ -62,7 +96,13 @@ export class AccommodationProviderResolverBase {
     });
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => AccommodationProvider)
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "update",
+    possession: "any",
+  })
   async updateAccommodationProvider(
     @graphql.Args() args: UpdateAccommodationProviderArgs
   ): Promise<AccommodationProvider | null> {
@@ -82,6 +122,11 @@ export class AccommodationProviderResolverBase {
   }
 
   @graphql.Mutation(() => AccommodationProvider)
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "delete",
+    possession: "any",
+  })
   async deleteAccommodationProvider(
     @graphql.Args() args: DeleteAccommodationProviderArgs
   ): Promise<AccommodationProvider | null> {

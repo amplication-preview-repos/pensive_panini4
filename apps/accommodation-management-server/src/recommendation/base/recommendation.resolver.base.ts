@@ -13,6 +13,12 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
+import * as nestAccessControl from "nest-access-control";
+import * as gqlACGuard from "../../auth/gqlAC.guard";
+import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
+import * as common from "@nestjs/common";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { Recommendation } from "./Recommendation";
 import { RecommendationCountArgs } from "./RecommendationCountArgs";
 import { RecommendationFindManyArgs } from "./RecommendationFindManyArgs";
@@ -22,10 +28,20 @@ import { UpdateRecommendationArgs } from "./UpdateRecommendationArgs";
 import { DeleteRecommendationArgs } from "./DeleteRecommendationArgs";
 import { Student } from "../../student/base/Student";
 import { RecommendationService } from "../recommendation.service";
+@common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Recommendation)
 export class RecommendationResolverBase {
-  constructor(protected readonly service: RecommendationService) {}
+  constructor(
+    protected readonly service: RecommendationService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
 
+  @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "read",
+    possession: "any",
+  })
   async _recommendationsMeta(
     @graphql.Args() args: RecommendationCountArgs
   ): Promise<MetaQueryPayload> {
@@ -35,14 +51,26 @@ export class RecommendationResolverBase {
     };
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [Recommendation])
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "read",
+    possession: "any",
+  })
   async recommendations(
     @graphql.Args() args: RecommendationFindManyArgs
   ): Promise<Recommendation[]> {
     return this.service.recommendations(args);
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => Recommendation, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "read",
+    possession: "own",
+  })
   async recommendation(
     @graphql.Args() args: RecommendationFindUniqueArgs
   ): Promise<Recommendation | null> {
@@ -53,7 +81,13 @@ export class RecommendationResolverBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => Recommendation)
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "create",
+    possession: "any",
+  })
   async createRecommendation(
     @graphql.Args() args: CreateRecommendationArgs
   ): Promise<Recommendation> {
@@ -71,7 +105,13 @@ export class RecommendationResolverBase {
     });
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => Recommendation)
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "update",
+    possession: "any",
+  })
   async updateRecommendation(
     @graphql.Args() args: UpdateRecommendationArgs
   ): Promise<Recommendation | null> {
@@ -99,6 +139,11 @@ export class RecommendationResolverBase {
   }
 
   @graphql.Mutation(() => Recommendation)
+  @nestAccessControl.UseRoles({
+    resource: "Recommendation",
+    action: "delete",
+    possession: "any",
+  })
   async deleteRecommendation(
     @graphql.Args() args: DeleteRecommendationArgs
   ): Promise<Recommendation | null> {
@@ -114,9 +159,15 @@ export class RecommendationResolverBase {
     }
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.ResolveField(() => Student, {
     nullable: true,
     name: "student",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "read",
+    possession: "any",
   })
   async getStudent(
     @graphql.Parent() parent: Recommendation

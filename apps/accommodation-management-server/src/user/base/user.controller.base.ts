@@ -16,7 +16,11 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import * as nestAccessControl from "nest-access-control";
+import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { UserService } from "../user.service";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { UserCreateInput } from "./UserCreateInput";
 import { User } from "./User";
 import { Post } from "../../post/base/Post";
@@ -27,10 +31,24 @@ import { ProfileFindManyArgs } from "../../profile/base/ProfileFindManyArgs";
 import { Profile } from "../../profile/base/Profile";
 import { ProfileWhereUniqueInput } from "../../profile/base/ProfileWhereUniqueInput";
 
+@swagger.ApiBearerAuth()
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class UserControllerBase {
-  constructor(protected readonly service: UserService) {}
+  constructor(
+    protected readonly service: UserService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
   @swagger.ApiCreatedResponse({ type: User })
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "create",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async createUser(@common.Body() data: UserCreateInput): Promise<User> {
     return await this.service.createUser({
       data: data,
@@ -47,9 +65,18 @@ export class UserControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [User] })
   @ApiNestedQuery(UserFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async users(@common.Req() request: Request): Promise<User[]> {
     const args = plainToClass(UserFindManyArgs, request.query);
     return this.service.users({
@@ -67,9 +94,18 @@ export class UserControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "own",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async user(
     @common.Param() params: UserWhereUniqueInput
   ): Promise<User | null> {
@@ -94,9 +130,18 @@ export class UserControllerBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async updateUser(
     @common.Param() params: UserWhereUniqueInput,
     @common.Body() data: UserUpdateInput
@@ -129,6 +174,14 @@ export class UserControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "delete",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async deleteUser(
     @common.Param() params: UserWhereUniqueInput
   ): Promise<User | null> {
@@ -156,8 +209,14 @@ export class UserControllerBase {
     }
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id/profiles")
   @ApiNestedQuery(ProfileFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Profile",
+    action: "read",
+    possession: "any",
+  })
   async findProfiles(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
@@ -195,6 +254,11 @@ export class UserControllerBase {
   }
 
   @common.Post("/:id/profiles")
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
   async connectProfiles(
     @common.Param() params: UserWhereUniqueInput,
     @common.Body() body: ProfileWhereUniqueInput[]
@@ -212,6 +276,11 @@ export class UserControllerBase {
   }
 
   @common.Patch("/:id/profiles")
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
   async updateProfiles(
     @common.Param() params: UserWhereUniqueInput,
     @common.Body() body: ProfileWhereUniqueInput[]
@@ -229,6 +298,11 @@ export class UserControllerBase {
   }
 
   @common.Delete("/:id/profiles")
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
   async disconnectProfiles(
     @common.Param() params: UserWhereUniqueInput,
     @common.Body() body: ProfileWhereUniqueInput[]

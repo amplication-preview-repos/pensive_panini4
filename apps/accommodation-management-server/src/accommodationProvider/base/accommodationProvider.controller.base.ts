@@ -16,7 +16,11 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import * as nestAccessControl from "nest-access-control";
+import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { AccommodationProviderService } from "../accommodationProvider.service";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AccommodationProviderCreateInput } from "./AccommodationProviderCreateInput";
 import { AccommodationProvider } from "./AccommodationProvider";
 import { Post } from "../../post/base/Post";
@@ -24,10 +28,24 @@ import { AccommodationProviderFindManyArgs } from "./AccommodationProviderFindMa
 import { AccommodationProviderWhereUniqueInput } from "./AccommodationProviderWhereUniqueInput";
 import { AccommodationProviderUpdateInput } from "./AccommodationProviderUpdateInput";
 
+@swagger.ApiBearerAuth()
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class AccommodationProviderControllerBase {
-  constructor(protected readonly service: AccommodationProviderService) {}
+  constructor(
+    protected readonly service: AccommodationProviderService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
   @swagger.ApiCreatedResponse({ type: AccommodationProvider })
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "create",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async createAccommodationProvider(
     @common.Body() data: AccommodationProviderCreateInput
   ): Promise<AccommodationProvider> {
@@ -50,9 +68,18 @@ export class AccommodationProviderControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [AccommodationProvider] })
   @ApiNestedQuery(AccommodationProviderFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "read",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async accommodationProviders(
     @common.Req() request: Request
   ): Promise<AccommodationProvider[]> {
@@ -76,9 +103,18 @@ export class AccommodationProviderControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: AccommodationProvider })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "read",
+    possession: "own",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async accommodationProvider(
     @common.Param() params: AccommodationProviderWhereUniqueInput
   ): Promise<AccommodationProvider | null> {
@@ -107,9 +143,18 @@ export class AccommodationProviderControllerBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: AccommodationProvider })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "update",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async updateAccommodationProvider(
     @common.Param() params: AccommodationProviderWhereUniqueInput,
     @common.Body() data: AccommodationProviderUpdateInput
@@ -146,6 +191,14 @@ export class AccommodationProviderControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: AccommodationProvider })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "AccommodationProvider",
+    action: "delete",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async deleteAccommodationProvider(
     @common.Param() params: AccommodationProviderWhereUniqueInput
   ): Promise<AccommodationProvider | null> {

@@ -16,7 +16,11 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import * as nestAccessControl from "nest-access-control";
+import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { VideoCallService } from "../videoCall.service";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { VideoCallCreateInput } from "./VideoCallCreateInput";
 import { VideoCall } from "./VideoCall";
 import { Post } from "../../post/base/Post";
@@ -24,10 +28,24 @@ import { VideoCallFindManyArgs } from "./VideoCallFindManyArgs";
 import { VideoCallWhereUniqueInput } from "./VideoCallWhereUniqueInput";
 import { VideoCallUpdateInput } from "./VideoCallUpdateInput";
 
+@swagger.ApiBearerAuth()
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class VideoCallControllerBase {
-  constructor(protected readonly service: VideoCallService) {}
+  constructor(
+    protected readonly service: VideoCallService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
   @swagger.ApiCreatedResponse({ type: VideoCall })
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "create",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async createVideoCall(
     @common.Body() data: VideoCallCreateInput
   ): Promise<VideoCall> {
@@ -43,9 +61,18 @@ export class VideoCallControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [VideoCall] })
   @ApiNestedQuery(VideoCallFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "read",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async videoCalls(@common.Req() request: Request): Promise<VideoCall[]> {
     const args = plainToClass(VideoCallFindManyArgs, request.query);
     return this.service.videoCalls({
@@ -60,9 +87,18 @@ export class VideoCallControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: VideoCall })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "read",
+    possession: "own",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async videoCall(
     @common.Param() params: VideoCallWhereUniqueInput
   ): Promise<VideoCall | null> {
@@ -84,9 +120,18 @@ export class VideoCallControllerBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: VideoCall })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "update",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async updateVideoCall(
     @common.Param() params: VideoCallWhereUniqueInput,
     @common.Body() data: VideoCallUpdateInput
@@ -116,6 +161,14 @@ export class VideoCallControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: VideoCall })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "VideoCall",
+    action: "delete",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async deleteVideoCall(
     @common.Param() params: VideoCallWhereUniqueInput
   ): Promise<VideoCall | null> {

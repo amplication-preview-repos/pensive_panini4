@@ -16,7 +16,11 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
+import * as nestAccessControl from "nest-access-control";
+import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { StaffService } from "../staff.service";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { StaffCreateInput } from "./StaffCreateInput";
 import { Staff } from "./Staff";
 import { Post } from "../../post/base/Post";
@@ -24,10 +28,24 @@ import { StaffFindManyArgs } from "./StaffFindManyArgs";
 import { StaffWhereUniqueInput } from "./StaffWhereUniqueInput";
 import { StaffUpdateInput } from "./StaffUpdateInput";
 
+@swagger.ApiBearerAuth()
+@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class StaffControllerBase {
-  constructor(protected readonly service: StaffService) {}
+  constructor(
+    protected readonly service: StaffService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Staff })
+  @nestAccessControl.UseRoles({
+    resource: "Staff",
+    action: "create",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async createStaff(@common.Body() data: StaffCreateInput): Promise<Staff> {
     return await this.service.createStaff({
       data: data,
@@ -41,9 +59,18 @@ export class StaffControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get()
   @swagger.ApiOkResponse({ type: [Staff] })
   @ApiNestedQuery(StaffFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Staff",
+    action: "read",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async staffItems(@common.Req() request: Request): Promise<Staff[]> {
     const args = plainToClass(StaffFindManyArgs, request.query);
     return this.service.staffItems({
@@ -58,9 +85,18 @@ export class StaffControllerBase {
     });
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Staff })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Staff",
+    action: "read",
+    possession: "own",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async staff(
     @common.Param() params: StaffWhereUniqueInput
   ): Promise<Staff | null> {
@@ -82,9 +118,18 @@ export class StaffControllerBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Staff })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Staff",
+    action: "update",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async updateStaff(
     @common.Param() params: StaffWhereUniqueInput,
     @common.Body() data: StaffUpdateInput
@@ -114,6 +159,14 @@ export class StaffControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Staff })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
+  @nestAccessControl.UseRoles({
+    resource: "Staff",
+    action: "delete",
+    possession: "any",
+  })
+  @swagger.ApiForbiddenResponse({
+    type: errors.ForbiddenException,
+  })
   async deleteStaff(
     @common.Param() params: StaffWhereUniqueInput
   ): Promise<Staff | null> {

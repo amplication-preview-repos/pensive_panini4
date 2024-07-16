@@ -13,6 +13,12 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
+import * as nestAccessControl from "nest-access-control";
+import * as gqlACGuard from "../../auth/gqlAC.guard";
+import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
+import * as common from "@nestjs/common";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
+import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { University } from "./University";
 import { UniversityCountArgs } from "./UniversityCountArgs";
 import { UniversityFindManyArgs } from "./UniversityFindManyArgs";
@@ -23,10 +29,20 @@ import { DeleteUniversityArgs } from "./DeleteUniversityArgs";
 import { StudentFindManyArgs } from "../../student/base/StudentFindManyArgs";
 import { Student } from "../../student/base/Student";
 import { UniversityService } from "../university.service";
+@common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => University)
 export class UniversityResolverBase {
-  constructor(protected readonly service: UniversityService) {}
+  constructor(
+    protected readonly service: UniversityService,
+    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
+  ) {}
 
+  @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "read",
+    possession: "any",
+  })
   async _universitiesMeta(
     @graphql.Args() args: UniversityCountArgs
   ): Promise<MetaQueryPayload> {
@@ -36,14 +52,26 @@ export class UniversityResolverBase {
     };
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [University])
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "read",
+    possession: "any",
+  })
   async universities(
     @graphql.Args() args: UniversityFindManyArgs
   ): Promise<University[]> {
     return this.service.universities(args);
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => University, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "read",
+    possession: "own",
+  })
   async university(
     @graphql.Args() args: UniversityFindUniqueArgs
   ): Promise<University | null> {
@@ -54,7 +82,13 @@ export class UniversityResolverBase {
     return result;
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => University)
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "create",
+    possession: "any",
+  })
   async createUniversity(
     @graphql.Args() args: CreateUniversityArgs
   ): Promise<University> {
@@ -64,7 +98,13 @@ export class UniversityResolverBase {
     });
   }
 
+  @common.UseInterceptors(AclValidateRequestInterceptor)
   @graphql.Mutation(() => University)
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "update",
+    possession: "any",
+  })
   async updateUniversity(
     @graphql.Args() args: UpdateUniversityArgs
   ): Promise<University | null> {
@@ -84,6 +124,11 @@ export class UniversityResolverBase {
   }
 
   @graphql.Mutation(() => University)
+  @nestAccessControl.UseRoles({
+    resource: "University",
+    action: "delete",
+    possession: "any",
+  })
   async deleteUniversity(
     @graphql.Args() args: DeleteUniversityArgs
   ): Promise<University | null> {
@@ -99,7 +144,13 @@ export class UniversityResolverBase {
     }
   }
 
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.ResolveField(() => [Student], { name: "students" })
+  @nestAccessControl.UseRoles({
+    resource: "Student",
+    action: "read",
+    possession: "any",
+  })
   async findStudents(
     @graphql.Parent() parent: University,
     @graphql.Args() args: StudentFindManyArgs
