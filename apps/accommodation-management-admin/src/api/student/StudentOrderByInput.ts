@@ -8,4 +8,6 @@ export type StudentOrderByInput = {
   password?: SortOrder;
   universityId?: SortOrder;
   location?: SortOrder;
+  roles?: SortOrder;
+  permissions?: SortOrder;
 };

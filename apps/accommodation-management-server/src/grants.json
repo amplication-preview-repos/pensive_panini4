@@ -1561,126 +1561,6 @@
   },
   {
     "role": "accommodationProvider",
-    "resource": "Staff",
-    "action": "read:own",
-    "attributes": "*"
-  },
-  {
-    "role": "admin",
-    "resource": "Staff",
-    "action": "read:own",
-    "attributes": "*"
-  },
-  {
-    "role": "staff",
-    "resource": "Staff",
-    "action": "read:own",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Staff",
-    "action": "read:own",
-    "attributes": "*"
-  },
-  {
-    "role": "accommodationProvider",
-    "resource": "Staff",
-    "action": "create:any",
-    "attributes": "*"
-  },
-  {
-    "role": "admin",
-    "resource": "Staff",
-    "action": "create:any",
-    "attributes": "*"
-  },
-  {
-    "role": "staff",
-    "resource": "Staff",
-    "action": "create:any",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Staff",
-    "action": "create:any",
-    "attributes": "*"
-  },
-  {
-    "role": "accommodationProvider",
-    "resource": "Staff",
-    "action": "update:any",
-    "attributes": "*"
-  },
-  {
-    "role": "admin",
-    "resource": "Staff",
-    "action": "update:any",
-    "attributes": "*"
-  },
-  {
-    "role": "staff",
-    "resource": "Staff",
-    "action": "update:any",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Staff",
-    "action": "update:any",
-    "attributes": "*"
-  },
-  {
-    "role": "accommodationProvider",
-    "resource": "Staff",
-    "action": "delete:any",
-    "attributes": "*"
-  },
-  {
-    "role": "admin",
-    "resource": "Staff",
-    "action": "delete:any",
-    "attributes": "*"
-  },
-  {
-    "role": "staff",
-    "resource": "Staff",
-    "action": "delete:any",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Staff",
-    "action": "delete:any",
-    "attributes": "*"
-  },
-  {
-    "role": "accommodationProvider",
-    "resource": "Staff",
-    "action": "read:any",
-    "attributes": "*"
-  },
-  {
-    "role": "admin",
-    "resource": "Staff",
-    "action": "read:any",
-    "attributes": "*"
-  },
-  {
-    "role": "staff",
-    "resource": "Staff",
-    "action": "read:any",
-    "attributes": "*"
-  },
-  {
-    "role": "user",
-    "resource": "Staff",
-    "action": "read:any",
-    "attributes": "*"
-  },
-  {
-    "role": "accommodationProvider",
     "resource": "AccommodationProvider",
     "action": "read:own",
     "attributes": "*"
@@ -1796,6 +1676,126 @@
   {
     "role": "user",
     "resource": "AccommodationProvider",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accommodationProvider",
+    "resource": "Staff",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Staff",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "staff",
+    "resource": "Staff",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Staff",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "accommodationProvider",
+    "resource": "Staff",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Staff",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "staff",
+    "resource": "Staff",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Staff",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accommodationProvider",
+    "resource": "Staff",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Staff",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "staff",
+    "resource": "Staff",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Staff",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accommodationProvider",
+    "resource": "Staff",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Staff",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "staff",
+    "resource": "Staff",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Staff",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accommodationProvider",
+    "resource": "Staff",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Staff",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "staff",
+    "resource": "Staff",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Staff",
     "action": "read:any",
     "attributes": "*"
   },

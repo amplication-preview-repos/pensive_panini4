@@ -8,6 +8,7 @@ import {
   SelectInput,
   BooleanInput,
   NumberInput,
+  SelectArrayInput,
 } from "react-admin";
 
 export const AccommodationProviderCreate = (
@@ -35,6 +36,20 @@ export const AccommodationProviderCreate = (
         <NumberInput step={1} label="Price" source="price" />
         <TextInput label="Name" source="name" />
         <NumberInput step={1} label="Popularity" source="popularity" />
+        <SelectArrayInput
+          label="roles"
+          source="roles"
+          choices={[{ label: "Option 1", value: "Option1" }]}
+          optionText="label"
+          optionValue="value"
+        />
+        <SelectArrayInput
+          label="permissions"
+          source="permissions"
+          choices={[{ label: "Option 1", value: "Option1" }]}
+          optionText="label"
+          optionValue="value"
+        />
       </SimpleForm>
     </Create>
   );

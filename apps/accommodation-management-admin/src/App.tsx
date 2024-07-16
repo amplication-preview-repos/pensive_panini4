@@ -57,14 +57,14 @@ import { StudentList } from "./student/StudentList";
 import { StudentCreate } from "./student/StudentCreate";
 import { StudentEdit } from "./student/StudentEdit";
 import { StudentShow } from "./student/StudentShow";
-import { StaffList } from "./staff/StaffList";
-import { StaffCreate } from "./staff/StaffCreate";
-import { StaffEdit } from "./staff/StaffEdit";
-import { StaffShow } from "./staff/StaffShow";
 import { AccommodationProviderList } from "./accommodationProvider/AccommodationProviderList";
 import { AccommodationProviderCreate } from "./accommodationProvider/AccommodationProviderCreate";
 import { AccommodationProviderEdit } from "./accommodationProvider/AccommodationProviderEdit";
 import { AccommodationProviderShow } from "./accommodationProvider/AccommodationProviderShow";
+import { StaffList } from "./staff/StaffList";
+import { StaffCreate } from "./staff/StaffCreate";
+import { StaffEdit } from "./staff/StaffEdit";
+import { StaffShow } from "./staff/StaffShow";
 import { UniversityList } from "./university/UniversityList";
 import { UniversityCreate } from "./university/UniversityCreate";
 import { UniversityEdit } from "./university/UniversityEdit";
@@ -191,18 +191,18 @@ const App = (): React.ReactElement => {
           show={StudentShow}
         />
         <Resource
-          name="Staff"
-          list={StaffList}
-          edit={StaffEdit}
-          create={StaffCreate}
-          show={StaffShow}
-        />
-        <Resource
           name="AccommodationProvider"
           list={AccommodationProviderList}
           edit={AccommodationProviderEdit}
           create={AccommodationProviderCreate}
           show={AccommodationProviderShow}
+        />
+        <Resource
+          name="Staff"
+          list={StaffList}
+          edit={StaffEdit}
+          create={StaffCreate}
+          show={StaffShow}
         />
         <Resource
           name="University"

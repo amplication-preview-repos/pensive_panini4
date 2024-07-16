@@ -11,8 +11,16 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsDate, IsOptional, MaxLength } from "class-validator";
+import {
+  IsString,
+  IsDate,
+  IsOptional,
+  MaxLength,
+  IsEnum,
+} from "class-validator";
 import { Type } from "class-transformer";
+import { EnumStaffRoles } from "./EnumStaffRoles";
+import { EnumStaffPermissions } from "./EnumStaffPermissions";
 
 @ObjectType()
 class Staff {
@@ -62,6 +70,34 @@ class Staff {
     nullable: true,
   })
   password!: string | null;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumStaffRoles,
+    isArray: true,
+  })
+  @IsEnum(EnumStaffRoles, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumStaffRoles], {
+    nullable: true,
+  })
+  roles?: Array<"Option1">;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumStaffPermissions,
+    isArray: true,
+  })
+  @IsEnum(EnumStaffPermissions, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumStaffPermissions], {
+    nullable: true,
+  })
+  permissions?: Array<"Option1">;
 }
 
 export { Staff as Staff };

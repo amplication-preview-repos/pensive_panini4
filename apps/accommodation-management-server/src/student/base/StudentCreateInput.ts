@@ -16,10 +16,13 @@ import {
   IsOptional,
   MaxLength,
   ValidateNested,
+  IsEnum,
 } from "class-validator";
 import { UniversityWhereUniqueInput } from "../../university/base/UniversityWhereUniqueInput";
 import { Type } from "class-transformer";
 import { RecommendationCreateNestedManyWithoutStudentsInput } from "./RecommendationCreateNestedManyWithoutStudentsInput";
+import { EnumStudentRoles } from "./EnumStudentRoles";
+import { EnumStudentPermissions } from "./EnumStudentPermissions";
 
 @InputType()
 class StudentCreateInput {
@@ -81,6 +84,34 @@ class StudentCreateInput {
     nullable: true,
   })
   recommendations?: RecommendationCreateNestedManyWithoutStudentsInput;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumStudentRoles,
+    isArray: true,
+  })
+  @IsEnum(EnumStudentRoles, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumStudentRoles], {
+    nullable: true,
+  })
+  roles?: Array<"Option1">;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumStudentPermissions,
+    isArray: true,
+  })
+  @IsEnum(EnumStudentPermissions, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumStudentPermissions], {
+    nullable: true,
+  })
+  permissions?: Array<"Option1">;
 }
 
 export { StudentCreateInput as StudentCreateInput };

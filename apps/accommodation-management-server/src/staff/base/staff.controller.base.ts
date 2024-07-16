@@ -55,6 +55,8 @@ export class StaffControllerBase {
         updatedAt: true,
         email: true,
         password: true,
+        roles: true,
+        permissions: true,
       },
     });
   }
@@ -81,6 +83,8 @@ export class StaffControllerBase {
         updatedAt: true,
         email: true,
         password: true,
+        roles: true,
+        permissions: true,
       },
     });
   }
@@ -108,6 +112,8 @@ export class StaffControllerBase {
         updatedAt: true,
         email: true,
         password: true,
+        roles: true,
+        permissions: true,
       },
     });
     if (result === null) {
@@ -144,6 +150,8 @@ export class StaffControllerBase {
           updatedAt: true,
           email: true,
           password: true,
+          roles: true,
+          permissions: true,
         },
       });
     } catch (error) {
@@ -179,6 +187,8 @@ export class StaffControllerBase {
           updatedAt: true,
           email: true,
           password: true,
+          roles: true,
+          permissions: true,
         },
       });
     } catch (error) {

@@ -10,4 +10,6 @@ export type Student = {
   university?: University | null;
   location: string | null;
   recommendations?: Array<Recommendation>;
+  roles?: Array<"Option1">;
+  permissions?: Array<"Option1">;
 };

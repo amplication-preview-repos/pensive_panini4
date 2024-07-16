@@ -31,6 +31,8 @@ export const StudentShow = (props: ShowProps): React.ReactElement => {
           <TextField source={UNIVERSITY_TITLE_FIELD} />
         </ReferenceField>
         <TextField label="Location" source="location" />
+        <TextField label="roles" source="roles" />
+        <TextField label="permissions" source="permissions" />
         <ReferenceManyField
           reference="Recommendation"
           target="studentId"

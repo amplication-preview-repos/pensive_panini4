@@ -36,6 +36,8 @@ export const AccommodationProviderList = (
         <TextField label="Price" source="price" />
         <TextField label="Name" source="name" />
         <TextField label="Popularity" source="popularity" />
+        <TextField label="roles" source="roles" />
+        <TextField label="permissions" source="permissions" />
       </Datagrid>
     </List>
   );

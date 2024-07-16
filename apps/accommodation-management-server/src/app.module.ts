@@ -12,8 +12,8 @@ import { PostModule } from "./post/post.module";
 import { VideoCallModule } from "./videoCall/videoCall.module";
 import { AdminModule } from "./admin/admin.module";
 import { StudentModule } from "./student/student.module";
-import { StaffModule } from "./staff/staff.module";
 import { AccommodationProviderModule } from "./accommodationProvider/accommodationProvider.module";
+import { StaffModule } from "./staff/staff.module";
 import { UniversityModule } from "./university/university.module";
 import { RecommendationModule } from "./recommendation/recommendation.module";
 import { AccommodationModule } from "./Accommodation/accommodation.module";
@@ -47,8 +47,8 @@ import { AuthModule } from "./auth/auth.module";
     VideoCallModule,
     AdminModule,
     StudentModule,
-    StaffModule,
     AccommodationProviderModule,
+    StaffModule,
     UniversityModule,
     RecommendationModule,
     AccommodationModule,

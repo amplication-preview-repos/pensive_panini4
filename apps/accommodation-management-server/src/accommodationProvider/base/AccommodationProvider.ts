@@ -26,6 +26,8 @@ import {
 
 import { Type } from "class-transformer";
 import { EnumAccommodationProviderRoomType } from "./EnumAccommodationProviderRoomType";
+import { EnumAccommodationProviderRoles } from "./EnumAccommodationProviderRoles";
+import { EnumAccommodationProviderPermissions } from "./EnumAccommodationProviderPermissions";
 
 @ObjectType()
 class AccommodationProvider {
@@ -158,6 +160,34 @@ class AccommodationProvider {
     nullable: true,
   })
   popularity!: number | null;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumAccommodationProviderRoles,
+    isArray: true,
+  })
+  @IsEnum(EnumAccommodationProviderRoles, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumAccommodationProviderRoles], {
+    nullable: true,
+  })
+  roles?: Array<"Option1">;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumAccommodationProviderPermissions,
+    isArray: true,
+  })
+  @IsEnum(EnumAccommodationProviderPermissions, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumAccommodationProviderPermissions], {
+    nullable: true,
+  })
+  permissions?: Array<"Option1">;
 }
 
 export { AccommodationProvider as AccommodationProvider };

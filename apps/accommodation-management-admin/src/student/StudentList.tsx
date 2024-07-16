@@ -33,6 +33,8 @@ export const StudentList = (props: ListProps): React.ReactElement => {
           <TextField source={UNIVERSITY_TITLE_FIELD} />
         </ReferenceField>
         <TextField label="Location" source="location" />
+        <TextField label="roles" source="roles" />
+        <TextField label="permissions" source="permissions" />
       </Datagrid>
     </List>
   );

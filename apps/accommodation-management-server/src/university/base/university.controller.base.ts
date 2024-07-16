@@ -225,6 +225,8 @@ export class UniversityControllerBase {
         },
 
         location: true,
+        roles: true,
+        permissions: true,
       },
     });
     if (results === null) {

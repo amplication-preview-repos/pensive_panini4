@@ -11,8 +11,16 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsDate, IsOptional, MaxLength } from "class-validator";
+import {
+  IsString,
+  IsDate,
+  IsOptional,
+  MaxLength,
+  IsEnum,
+} from "class-validator";
 import { Type } from "class-transformer";
+import { EnumAdminRoles } from "./EnumAdminRoles";
+import { EnumAdminPermissions } from "./EnumAdminPermissions";
 
 @ObjectType()
 class Admin {
@@ -62,6 +70,34 @@ class Admin {
     nullable: true,
   })
   password!: string | null;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumAdminRoles,
+    isArray: true,
+  })
+  @IsEnum(EnumAdminRoles, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumAdminRoles], {
+    nullable: true,
+  })
+  roles?: Array<"Option1">;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumAdminPermissions,
+    isArray: true,
+  })
+  @IsEnum(EnumAdminPermissions, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumAdminPermissions], {
+    nullable: true,
+  })
+  permissions?: Array<"Option1">;
 }
 
 export { Admin as Admin };

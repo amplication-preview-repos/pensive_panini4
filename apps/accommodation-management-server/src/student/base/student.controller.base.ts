@@ -76,6 +76,8 @@ export class StudentControllerBase {
         },
 
         location: true,
+        roles: true,
+        permissions: true,
       },
     });
   }
@@ -110,6 +112,8 @@ export class StudentControllerBase {
         },
 
         location: true,
+        roles: true,
+        permissions: true,
       },
     });
   }
@@ -145,6 +149,8 @@ export class StudentControllerBase {
         },
 
         location: true,
+        roles: true,
+        permissions: true,
       },
     });
     if (result === null) {
@@ -197,6 +203,8 @@ export class StudentControllerBase {
           },
 
           location: true,
+          roles: true,
+          permissions: true,
         },
       });
     } catch (error) {
@@ -240,6 +248,8 @@ export class StudentControllerBase {
           },
 
           location: true,
+          roles: true,
+          permissions: true,
         },
       });
     } catch (error) {

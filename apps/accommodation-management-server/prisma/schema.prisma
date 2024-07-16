@@ -145,37 +145,33 @@ model VideoCall {
 }
 
 model Admin {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String?
-  password  String?
+  id          String                 @id @default(cuid())
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  email       String?
+  password    String?
+  roles       EnumAdminRoles[]
+  permissions EnumAdminPermissions[]
 }
 
 model Student {
-  id              String           @id @default(cuid())
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  id              String                   @id @default(cuid())
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
   email           String?
   password        String?
-  university      University?      @relation(fields: [universityId], references: [id])
+  university      University?              @relation(fields: [universityId], references: [id])
   universityId    String?
   location        String?
   recommendations Recommendation[]
-}
-
-model Staff {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String?
-  password  String?
+  roles           EnumStudentRoles[]
+  permissions     EnumStudentPermissions[]
 }
 
 model AccommodationProvider {
-  id                  String                             @id @default(cuid())
-  createdAt           DateTime                           @default(now())
-  updatedAt           DateTime                           @updatedAt
+  id                  String                                 @id @default(cuid())
+  createdAt           DateTime                               @default(now())
+  updatedAt           DateTime                               @updatedAt
   email               String?
   password            String?
   roomType            EnumAccommodationProviderRoomType?
@@ -185,6 +181,18 @@ model AccommodationProvider {
   price               Int?
   name                String?
   popularity          Int?
+  roles               EnumAccommodationProviderRoles[]
+  permissions         EnumAccommodationProviderPermissions[]
+}
+
+model Staff {
+  id          String                 @id @default(cuid())
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  email       String?
+  password    String?
+  roles       EnumStaffRoles[]
+  permissions EnumStaffPermissions[]
 }
 
 model University {
@@ -224,6 +232,38 @@ enum EnumProfileRequestedRoomType {
   Option1
 }
 
+enum EnumAdminRoles {
+  Option1
+}
+
+enum EnumAdminPermissions {
+  Option1
+}
+
+enum EnumStudentRoles {
+  Option1
+}
+
+enum EnumStudentPermissions {
+  Option1
+}
+
 enum EnumAccommodationProviderRoomType {
+  Option1
+}
+
+enum EnumAccommodationProviderRoles {
+  Option1
+}
+
+enum EnumAccommodationProviderPermissions {
+  Option1
+}
+
+enum EnumStaffRoles {
+  Option1
+}
+
+enum EnumStaffPermissions {
   Option1
 }

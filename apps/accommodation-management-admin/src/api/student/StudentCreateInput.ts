@@ -7,4 +7,6 @@ export type StudentCreateInput = {
   university?: UniversityWhereUniqueInput | null;
   location?: string | null;
   recommendations?: RecommendationCreateNestedManyWithoutStudentsInput;
+  roles?: Array<"Option1">;
+  permissions?: Array<"Option1">;
 };

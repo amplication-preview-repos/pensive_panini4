@@ -64,6 +64,8 @@ export class AccommodationProviderControllerBase {
         price: true,
         name: true,
         popularity: true,
+        roles: true,
+        permissions: true,
       },
     });
   }
@@ -99,6 +101,8 @@ export class AccommodationProviderControllerBase {
         price: true,
         name: true,
         popularity: true,
+        roles: true,
+        permissions: true,
       },
     });
   }
@@ -133,6 +137,8 @@ export class AccommodationProviderControllerBase {
         price: true,
         name: true,
         popularity: true,
+        roles: true,
+        permissions: true,
       },
     });
     if (result === null) {
@@ -176,6 +182,8 @@ export class AccommodationProviderControllerBase {
           price: true,
           name: true,
           popularity: true,
+          roles: true,
+          permissions: true,
         },
       });
     } catch (error) {
@@ -218,6 +226,8 @@ export class AccommodationProviderControllerBase {
           price: true,
           name: true,
           popularity: true,
+          roles: true,
+          permissions: true,
         },
       });
     } catch (error) {

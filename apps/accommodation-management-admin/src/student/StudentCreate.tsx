@@ -36,6 +36,20 @@ export const StudentCreate = (props: CreateProps): React.ReactElement => {
         >
           <SelectArrayInput optionText={RecommendationTitle} />
         </ReferenceArrayInput>
+        <SelectArrayInput
+          label="roles"
+          source="roles"
+          choices={[{ label: "Option 1", value: "Option1" }]}
+          optionText="label"
+          optionValue="value"
+        />
+        <SelectArrayInput
+          label="permissions"
+          source="permissions"
+          choices={[{ label: "Option 1", value: "Option1" }]}
+          optionText="label"
+          optionValue="value"
+        />
       </SimpleForm>
     </Create>
   );

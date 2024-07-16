@@ -13,4 +13,6 @@ export type AccommodationProviderOrderByInput = {
   price?: SortOrder;
   name?: SortOrder;
   popularity?: SortOrder;
+  roles?: SortOrder;
+  permissions?: SortOrder;
 };

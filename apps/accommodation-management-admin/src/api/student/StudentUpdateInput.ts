@@ -7,4 +7,6 @@ export type StudentUpdateInput = {
   university?: UniversityWhereUniqueInput | null;
   location?: string | null;
   recommendations?: RecommendationUpdateManyWithoutStudentsInput;
+  roles?: Array<"Option1">;
+  permissions?: Array<"Option1">;
 };

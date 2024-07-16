@@ -17,10 +17,13 @@ import {
   IsOptional,
   MaxLength,
   ValidateNested,
+  IsEnum,
 } from "class-validator";
 import { Type } from "class-transformer";
 import { University } from "../../university/base/University";
 import { Recommendation } from "../../recommendation/base/Recommendation";
+import { EnumStudentRoles } from "./EnumStudentRoles";
+import { EnumStudentPermissions } from "./EnumStudentPermissions";
 
 @ObjectType()
 class Student {
@@ -100,6 +103,34 @@ class Student {
   @Type(() => Recommendation)
   @IsOptional()
   recommendations?: Array<Recommendation>;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumStudentRoles,
+    isArray: true,
+  })
+  @IsEnum(EnumStudentRoles, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumStudentRoles], {
+    nullable: true,
+  })
+  roles?: Array<"Option1">;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumStudentPermissions,
+    isArray: true,
+  })
+  @IsEnum(EnumStudentPermissions, {
+    each: true,
+  })
+  @IsOptional()
+  @Field(() => [EnumStudentPermissions], {
+    nullable: true,
+  })
+  permissions?: Array<"Option1">;
 }
 
 export { Student as Student };

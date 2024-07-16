@@ -6,4 +6,6 @@ export type AdminOrderByInput = {
   updatedAt?: SortOrder;
   email?: SortOrder;
   password?: SortOrder;
+  roles?: SortOrder;
+  permissions?: SortOrder;
 };
