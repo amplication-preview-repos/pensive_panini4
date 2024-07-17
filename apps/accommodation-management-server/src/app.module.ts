@@ -16,7 +16,9 @@ import { AccommodationProviderModule } from "./accommodationProvider/accommodati
 import { StaffModule } from "./staff/staff.module";
 import { UniversityModule } from "./university/university.module";
 import { RecommendationModule } from "./recommendation/recommendation.module";
+import { RoleModule } from "./role/role.module";
 import { AccommodationModule } from "./Accommodation/accommodation.module";
+import { UserroleModule } from "./Userrole/userrole.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
@@ -51,7 +53,9 @@ import { AuthModule } from "./auth/auth.module";
     StaffModule,
     UniversityModule,
     RecommendationModule,
+    RoleModule,
     AccommodationModule,
+    UserroleModule,
     HealthModule,
     PrismaModule,
     SecretsManagerModule,

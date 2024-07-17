@@ -216,6 +216,15 @@ model Recommendation {
   studentId   String?
 }
 
+model Role {
+  id          String               @id @default(cuid())
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  name        String?
+  studentRole EnumRoleStudentRole?
+  typeField   String?
+}
+
 enum EnumPropertyAccommodationStatus {
   Option1
 }
@@ -265,5 +274,9 @@ enum EnumStaffRoles {
 }
 
 enum EnumStaffPermissions {
+  Option1
+}
+
+enum EnumRoleStudentRole {
   Option1
 }
