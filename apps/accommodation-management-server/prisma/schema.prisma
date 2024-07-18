@@ -1,0 +1,282 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Property {
+  id                    String                           @id @default(cuid())
+  createdAt             DateTime                         @default(now())
+  updatedAt             DateTime                         @updatedAt
+  address               String?
+  description           String?
+  name                  String?
+  provider              String?
+  rooms                 Room[]
+  reviews               Review[]
+  propertyPictures      Json?
+  roomPictures          Json?
+  accommodationStatus   EnumPropertyAccommodationStatus?
+  roomType              EnumPropertyRoomType?
+  accommodationProvider String?
+  location              String?
+  waterIncluded         Boolean?
+  electricityIncluded   Boolean?
+  wifiAmount            Float?
+  wifiIncluded          Boolean?
+}
+
+model Room {
+  id           String             @id @default(cuid())
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  name         String?
+  typeField    EnumRoomTypeField?
+  price        Float?
+  property     Property?          @relation(fields: [propertyId], references: [id])
+  propertyId   String?
+  appointments Appointment[]
+}
+
+model Review {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  comment    String?
+  rating     Int?
+  student    String?
+  property   Property? @relation(fields: [propertyId], references: [id])
+  propertyId String?
+}
+
+model Appointment {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  date      DateTime?
+  student   String?
+  room      Room?     @relation(fields: [roomId], references: [id])
+  roomId    String?
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String?
+  description String?
+  file        Json?
+  student     String?
+}
+
+model User {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  firstName String?
+  lastName  String?
+  username  String    @unique
+  email     String?   @unique
+  password  String
+  roles     Json
+  profiles  Profile[]
+}
+
+model Profile {
+  id                String                        @id @default(cuid())
+  createdAt         DateTime                      @default(now())
+  updatedAt         DateTime                      @updatedAt
+  username          String?
+  bio               String?
+  profilePicture    Json?
+  user              User?                         @relation(fields: [userId], references: [id])
+  userId            String?
+  surname           String?
+  age               Int?
+  requestedRoomType EnumProfileRequestedRoomType?
+  name              String?
+  institution       String?
+}
+
+model Comment {
+  id                 String   @id @default(cuid())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  content            String?
+  author             String?
+  post               Post?    @relation(fields: [postId], references: [id])
+  postId             String?
+  isActive           Boolean?
+  accommodation      String?
+  student            String?
+  stayDurationMonths Int?
+}
+
+model Chat {
+  id                     String    @id @default(cuid())
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  messages               String?
+  chatCreatedAt          DateTime?
+  chatCreatedAtTimestamp DateTime?
+  chatMessages           String?
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String?
+  content   String?
+  images    Json?
+  author    String?
+  comments  Comment[]
+}
+
+model VideoCall {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  callEnd   DateTime?
+  callStart DateTime?
+}
+
+model Admin {
+  id          String                 @id @default(cuid())
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  email       String?
+  password    String?
+  roles       EnumAdminRoles[]
+  permissions EnumAdminPermissions[]
+}
+
+model Student {
+  id              String                   @id @default(cuid())
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  email           String?
+  password        String?
+  university      University?              @relation(fields: [universityId], references: [id])
+  universityId    String?
+  location        String?
+  recommendations Recommendation[]
+  roles           EnumStudentRoles[]
+  permissions     EnumStudentPermissions[]
+}
+
+model AccommodationProvider {
+  id                  String                                 @id @default(cuid())
+  createdAt           DateTime                               @default(now())
+  updatedAt           DateTime                               @updatedAt
+  email               String?
+  password            String?
+  roomType            EnumAccommodationProviderRoomType?
+  location            String?
+  electricityIncluded Boolean?
+  waterIncluded       Boolean?
+  price               Int?
+  name                String?
+  popularity          Int?
+  roles               EnumAccommodationProviderRoles[]
+  permissions         EnumAccommodationProviderPermissions[]
+}
+
+model Staff {
+  id          String                 @id @default(cuid())
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  email       String?
+  password    String?
+  roles       EnumStaffRoles[]
+  permissions EnumStaffPermissions[]
+}
+
+model University {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String?
+  location  String?
+  students  Student[]
+}
+
+model Recommendation {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String?
+  description String?
+  category    String?
+  location    String?
+  student     Student? @relation(fields: [studentId], references: [id])
+  studentId   String?
+}
+
+model Role {
+  id          String               @id @default(cuid())
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  name        String?
+  studentRole EnumRoleStudentRole?
+  typeField   String?
+}
+
+enum EnumPropertyAccommodationStatus {
+  Option1
+}
+
+enum EnumPropertyRoomType {
+  Option1
+}
+
+enum EnumRoomTypeField {
+  Option1
+}
+
+enum EnumProfileRequestedRoomType {
+  Option1
+}
+
+enum EnumAdminRoles {
+  Option1
+}
+
+enum EnumAdminPermissions {
+  Option1
+}
+
+enum EnumStudentRoles {
+  Option1
+}
+
+enum EnumStudentPermissions {
+  Option1
+}
+
+enum EnumAccommodationProviderRoomType {
+  Option1
+}
+
+enum EnumAccommodationProviderRoles {
+  Option1
+}
+
+enum EnumAccommodationProviderPermissions {
+  Option1
+}
+
+enum EnumStaffRoles {
+  Option1
+}
+
+enum EnumStaffPermissions {
+  Option1
+}
+
+enum EnumRoleStudentRole {
+  Option1
+}
