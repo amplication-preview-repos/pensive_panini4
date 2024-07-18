@@ -18,6 +18,7 @@ import { UniversityModule } from "./university/university.module";
 import { RecommendationModule } from "./recommendation/recommendation.module";
 import { RoleModule } from "./role/role.module";
 import { AccommodationModule } from "./Accommodation/accommodation.module";
+import { AuthModule } from "./Auth/auth.module";
 import { UserroleModule } from "./Userrole/userrole.module";
 import { HealthModule } from "./health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
@@ -55,6 +56,7 @@ import { AuthModule } from "./auth/auth.module";
     RecommendationModule,
     RoleModule,
     AccommodationModule,
+    AuthModule,
     UserroleModule,
     HealthModule,
     PrismaModule,
